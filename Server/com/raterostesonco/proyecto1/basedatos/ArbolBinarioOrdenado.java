@@ -1,6 +1,7 @@
 package Server.com.raterostesonco.proyecto1.basedatos;
 
 import java.util.Iterator;
+import java.util.Stack;
 
 /**
  * <p>Clase para árboles binarios ordenados. Los árboles son genéricos, pero
@@ -21,16 +22,16 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
     private class Iterador implements Iterator<T> {
 
         /* Pila para recorrer los vértices en DFS in-order. */
-        private Pila<Vertice> pila;
+        private Stack<Vertice> pila;
 
         /* Inicializa al iterador. */
         private Iterador() {
-            pila = new Pila<>();
+            pila = new Stack<>();
 
             if (!esVacia()) {
                 Vertice vertice = raiz;
                 while (vertice != null) {
-                    pila.mete(vertice);
+                    pila.push(vertice);
                     vertice = vertice.izquierdo;
                 }
             }
@@ -39,19 +40,19 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
         /* Nos dice si hay un elemento siguiente. */
         @Override
         public boolean hasNext() {
-            return !pila.esVacia();
+            return !pila.empty();
         }
 
         /* Regresa el siguiente elemento en orden DFS in-order. */
         @Override
         public T next() {
 
-            Vertice retorno = pila.saca(), meter;
+            Vertice retorno = pila.pop(), meter;
 
             if (retorno.hayDerecho()) {
                 meter = retorno.derecho;
                 while (meter != null) {
-                    pila.mete(meter);
+                    pila.push(meter)
                     meter = meter.izquierdo;
                 }
             }
@@ -343,65 +344,6 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
             this.raiz = derecho;
         }
     }
-
-    /**
-     * Realiza un recorrido DFS <em>pre-order</em> en el árbol, ejecutando la
-     * acción recibida en cada elemento del árbol.
-     *
-     * @param accion la acción a realizar en cada elemento del árbol.
-     */
-    public void dfsPreOrder(AccionVerticeArbolBinario<T> accion) {
-        dfsPreOrder(raiz, accion);
-    }
-
-    private void dfsPreOrder(VerticeArbolBinario<T> vertice, AccionVerticeArbolBinario<T> accion) {
-        if (vertice == null) {
-            return;
-        }
-        accion.actua(vertice);
-        dfsPreOrder(vertice(vertice).izquierdo, accion);
-        dfsPreOrder(vertice(vertice).derecho, accion);
-    }
-
-    /**
-     * Realiza un recorrido DFS <em>in-order</em> en el árbol, ejecutando la
-     * acción recibida en cada elemento del árbol.
-     *
-     * @param accion la acción a realizar en cada elemento del árbol.
-     */
-    public void dfsInOrder(AccionVerticeArbolBinario<T> accion) {
-        dfsInOrder(raiz, accion);
-    }
-
-    private void dfsInOrder(VerticeArbolBinario<T> vertice, AccionVerticeArbolBinario<T> accion) {
-        if (vertice == null) {
-            return;
-        }
-        dfsInOrder(vertice(vertice).izquierdo, accion);
-        accion.actua(vertice);
-        dfsInOrder(vertice(vertice).derecho, accion);
-    }
-
-
-    /**
-     * Realiza un recorrido DFS <em>post-order</em> en el árbol, ejecutando la
-     * acción recibida en cada elemento del árbol.
-     *
-     * @param accion la acción a realizar en cada elemento del árbol.
-     */
-    public void dfsPostOrder(AccionVerticeArbolBinario<T> accion) {
-        dfsPostOrder(raiz, accion);
-    }
-
-    private void dfsPostOrder(VerticeArbolBinario<T> vertice, AccionVerticeArbolBinario<T> accion) {
-        if (vertice == null) {
-            return;
-        }
-        dfsPostOrder(vertice(vertice).izquierdo, accion);
-        dfsPostOrder(vertice(vertice).derecho, accion);
-        accion.actua(vertice);
-    }
-
     /**
      * Regresa un iterador para iterar el árbol. El árbol se itera en orden.
      *
