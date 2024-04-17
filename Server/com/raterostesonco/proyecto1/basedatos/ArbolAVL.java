@@ -1,4 +1,6 @@
-package Cliente.com.raterostesonco.proyecto1.basedatos;
+package Server.com.raterostesonco.proyecto1.basedatos;
+
+import java.io.Serializable;
 
 /**
  * <p>Clase para árboles AVL.</p>
@@ -7,7 +9,7 @@ package Cliente.com.raterostesonco.proyecto1.basedatos;
  * la áltura de sus subárboles izquierdo y derecho está entre -1 y 1.</p>
  */
 public class ArbolAVL<T extends Comparable<T>>
-    extends ArbolBinarioOrdenado<T> {
+    extends ArbolBinarioOrdenado<T> implements Serializable{
 
     /**
      * Clase interna protegida para vértices.
