@@ -13,7 +13,7 @@ import java.util.LinkedList;
  * a donde sea necesario
  *
  */
-public class Cliente implements Comparable{
+public class Cliente implements Comparable<Cliente>{
 
 	private String username;
     private String password;
@@ -26,6 +26,9 @@ public class Cliente implements Comparable{
     private LinkedList<String> historialSesiones;
     private CarritoCompra carritoCompras;
 
+    /**
+     *  TODO: Cambiar privacidad de este metodo cuando se terminen de crear los clientes de prueba.
+     *  */
     Cliente(String u, String pass, String name, String t, String dir, BankAccount bank, Pais pais, String id){
         username = u;
         password = pass;
@@ -33,8 +36,20 @@ public class Cliente implements Comparable{
         telephone = t;
         direccion = dir;
         bankAccount = bank;
-        this.pais = pais;
+        this.country = pais;
         this.id = id;
+    }
+
+    /**
+     *  Crea un objeto Cliente con solamente el campo de id llenado.
+     *
+     *  Este objeto es el que nos servirá como un comparable para poder luego encontrar
+     *  el objeto Cliente adecuado en la {@link BaseDeDatos}
+     *
+     *  @return un objecto Cliente con todos los campos vacíos excepto el de id.
+     *  */
+    public static Cliente darReferencia(String id){
+        return new Cliente(null, null, null, null, null, null, null, id);
     }
 
     public BankAccount getBankAccount() {
@@ -83,12 +98,7 @@ public class Cliente implements Comparable{
      * Los objetos Cliente son comparables entre si por su ID, para poder organizarlos en la {@link BaseDeDatos}
      */
     @Override
-    public int compareTo(Object arg0) {
-        if (arg0 == null || getClass() != arg0.getClass())
-            throw new ClassCastException();
-        @SuppressWarnings("unchecked")
-        Cliente arg = (Cliente)arg0;
-
-        return id.compareTo(arg.getId());
+    public int compareTo(Cliente arg0) {
+            return id.compareTo(arg0.getId());
     }
 }
