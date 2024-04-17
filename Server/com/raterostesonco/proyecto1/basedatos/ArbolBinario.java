@@ -1,5 +1,6 @@
 package Server.com.raterostesonco.proyecto1.basedatos;
 
+import java.io.Serializable;
 import java.util.NoSuchElementException;
 
 /**
@@ -8,12 +9,12 @@ import java.util.NoSuchElementException;
  * <p>La clase proporciona las operaciones básicas para árboles binarios, pero
  * deja la implementación de varias en manos de las subclases concretas.</p>
  */
-public abstract class ArbolBinario<T> implements Coleccion<T> {
+public abstract class ArbolBinario<T> implements Coleccion<T> , Serializable{
 
     /**
      * Clase interna protegida para vértices.
      */
-    protected class Vertice implements VerticeArbolBinario<T> {
+    protected class Vertice implements VerticeArbolBinario<T> , Serializable{
 
         /**
          * El elemento del vértice.

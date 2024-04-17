@@ -43,6 +43,9 @@ public class DevCreacionArbol {
         obj.agrega(cliente3);
         obj.agrega(cliente2);
 
+        //Debug
+        System.out.println(obj);
+
         //Serializamos el arbol
         String filename = "Server/com/raterostesonco/proyecto1/basedatos/arbol.ser";
 

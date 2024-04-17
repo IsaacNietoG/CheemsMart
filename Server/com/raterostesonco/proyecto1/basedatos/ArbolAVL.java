@@ -14,7 +14,7 @@ public class ArbolAVL<T extends Comparable<T>>
     /**
      * Clase interna protegida para vértices.
      */
-    protected class VerticeAVL extends Vertice {
+    protected class VerticeAVL extends Vertice implements Serializable{
 
         /** La altura del vértice. */
         public int altura;
