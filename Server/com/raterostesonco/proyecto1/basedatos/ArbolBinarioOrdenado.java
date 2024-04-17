@@ -16,7 +16,7 @@ import java.util.Stack;
  * </ul>
  */
 public class ArbolBinarioOrdenado<T extends Comparable<T>>
-        extends ArbolBinario<T> {
+        extends ArbolBinario<T>{
 
     /* Clase interna privada para iteradores. */
     private class Iterador implements Iterator<T> {
