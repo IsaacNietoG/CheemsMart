@@ -1,4 +1,4 @@
-package Cliente.com.raterostesonco.proyecto1.basedatos;
+package Server.com.raterostesonco.proyecto1.basedatos;
 
 /**
  * <p>Clase para árboles AVL.</p>
