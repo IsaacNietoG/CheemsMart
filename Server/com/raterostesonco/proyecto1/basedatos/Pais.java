@@ -1,9 +1,10 @@
 package Server.com.raterostesonco.proyecto1.basedatos;
 
+
 /**
  * Enumeracion de paises
  */
-public enum Pais {
+public enum Pais{
 
 	MEXICO,
     ESPAÑA,

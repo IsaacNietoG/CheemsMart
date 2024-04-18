@@ -1,5 +1,6 @@
 package Server.com.raterostesonco.proyecto1.basedatos;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 
@@ -13,7 +14,7 @@ import java.util.LinkedList;
  * a donde sea necesario
  *
  */
-public class Cliente implements Comparable<Cliente>{
+public class Cliente implements Comparable<Cliente>, Serializable{
 
 	private String username;
     private String password;

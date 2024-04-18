@@ -1,5 +1,7 @@
 package Server.com.raterostesonco.proyecto1.basedatos;
 
+import java.io.Serializable;
+
 /**
  * Objeto que emula una cuenta de banco
  *
@@ -9,7 +11,7 @@ package Server.com.raterostesonco.proyecto1.basedatos;
  * El numero de cuenta no puede ser leido externamente, para asegurar una compra segura en el proyecto,
  * y cada vez que se intenta realizar un cobro, se verifica que se conozca el numero de cuenta.
  */
-public class BankAccount {
+public class BankAccount implements Serializable{
 
     String cuenta;
     double balance;

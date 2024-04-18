@@ -52,7 +52,7 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
             if (retorno.hayDerecho()) {
                 meter = retorno.derecho;
                 while (meter != null) {
-                    pila.push(meter)
+                    pila.push(meter);
                     meter = meter.izquierdo;
                 }
             }

@@ -26,7 +26,7 @@ public class BaseDeDatos {
      *  el código para solicitarla en la carga del Servidor.
      *  */
     public static void cargarBaseDatos(){
-        String filename = "arbol.ser";
+        String filename = "Server/com/raterostesonco/proyecto1/basedatos/arbol.ser";
 
         try{
             FileInputStream file = new FileInputStream(filename);
@@ -51,7 +51,7 @@ public class BaseDeDatos {
      *  se puedan conservar entre sesiones.
      *  */
     public static void guardarBaseDatos(){
-        String filename = "arbol.ser";
+        String filename = "Server/com/raterostesonco/proyecto1/basedatos/arbol.ser";
 
         try{
             FileOutputStream file = new FileOutputStream(filename);
