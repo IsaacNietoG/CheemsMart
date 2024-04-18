@@ -13,8 +13,8 @@ import java.io.Serializable;
  */
 public class BankAccount implements Serializable{
 
-    String cuenta;
-    double balance;
+    private String cuenta;
+    private double balance;
 
     BankAccount(String cuenta, double balance){
         this.cuenta = cuenta;
@@ -22,21 +22,34 @@ public class BankAccount implements Serializable{
     }
 
     /**
-     *  Para cobrar a la cuenta bancaria. Realiza una verificacion segura de que
-     *  el usuario que va a comprar sepa su numero de cuenta. Asi mismo,
-     *  fracasa si se intenta cobrar más dinero del que se tiene en la cuenta.
+     *  Para cobrar a la cuenta bancaria.
      *
-     *  @param intento    El supuesto numero de cuenta de la cuenta
-     *         cobro      La cantidad a cobrar
+     *  Fracasa si se intenta cobrar más dinero del que se tiene en la cuenta.
+     *
+     *  @param cobro      La cantidad a cobrar
+     *
      *
      *  @return si el cobro fue exitoso o no
      *  */
-    public boolean cobrar(String intento, double cobro){
-        if(!intento.equals(cuenta) || cobro > balance)
+    public boolean cobrar(double cobro){
+        if(cobro > balance)
             return false;
 
         balance -= cobro;
         return true;
+    }
+
+    /**
+     *  Verifica si el intento dado coincide con el numero de cuenta interno
+     *
+     *  Para un fallo rápido en métodos de otras clases que requieran consultar el
+     *  número de cuenta. Un ejemplo es el metodo TiendaAbstracta.hacerCompra, que
+     *  utiliza este método para una guard clause propia.
+     *
+     *  @return si el número de cuenta es correcto o no.
+     *  */
+    public boolean verificarCuenta(String intento){
+        return intento.equals(this.cuenta);
     }
 
     public double getBalance() {

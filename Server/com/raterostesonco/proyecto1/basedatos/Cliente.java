@@ -53,7 +53,9 @@ public class Cliente implements Comparable<Cliente>, Serializable{
         return new Cliente(null, null, null, null, null, null, null, id);
     }
 
-    public BankAccount getBankAccount() {
+    public BankAccount getBankAccount(String intento) throws NumeroDeCuentaInvalidoException{
+        if (!this.bankAccount.verificarCuenta(intento))
+            throw new NumeroDeCuentaInvalidoException();
         return bankAccount;
     }
 

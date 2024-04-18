@@ -2,6 +2,7 @@ package Server.com.raterostesonco.proyecto1;
 
 import Server.com.raterostesonco.proyecto1.basedatos.CatalogoItem;
 import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
+import Server.com.raterostesonco.proyecto1.basedatos.NumeroDeCuentaInvalidoException;
 
 /**
  * La interface que da los metodos necesarios para una Tienda
@@ -15,6 +16,6 @@ public interface Tienda {
     public int mostrarOpciones();
     public void mostrarCatalogo();
     public void agregarCarrito(Cliente cliente, CatalogoItem item);
-    public void hacerCompra(Cliente cliente);
+    public boolean hacerCompra(Cliente cliente, String cuenta);
 
 }
