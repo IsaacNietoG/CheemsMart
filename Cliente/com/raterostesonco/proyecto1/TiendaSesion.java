@@ -1,6 +1,6 @@
 package Cliente.com.raterostesonco.proyecto1;
 
-import Cliente.com.raterostesonco.proyecto1.communication.*;
+import Server.com.raterostesonco.proyecto1.communication.*;
 import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
@@ -13,26 +13,21 @@ import java.util.LinkedList;
 public class TiendaSesion {
 
     private final Cliente cliente;
+    private String token;
     private InterfaceUsuario interfaceUsuario;
     private Catalogo catalogo;
+    private LinkedList<CatalogoItem> carrito;
     private LinkedList<CatalogoItem> ofertasActivas;
 
-    public TiendaSesion(User user) {
-        this.user = user;
-        interfaceUsuario = new InterfaceUsuario(this);
-        carrito = new ArrayList<>();
-
-        actualizarCatalogo();
-    }
-
-    public void iniciar() {
-        interfaceUsuario.imprimirMensaje("Bienvenido a CheemsMart %s!");
 
     public TiendaSesion(Cliente user, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas) {
         this.cliente = user;
         this.catalogo = catalogo;
         this.ofertasActivas = ofertasActivas;
+        this.carrito = new LinkedList<>();
+        this.interfaceUsuario = new InterfaceUsuario(this);
 
+        // TODO token
     }
 
     public void iniciar() {
@@ -43,7 +38,7 @@ public class TiendaSesion {
 
     private void actualizarCatalogo() {
         @SuppressWarnings("unchecked")
-        ArrayList<String> catalogo = (ArrayList<String>) Cliente.enviarPaquete(new PaqueteTienda(user.getToken(), PaqueteTienda.TipoPaqueteTienda.SOLICITAR_CATALOGO)).getArgs()[0];
+        ArrayList<CatalogoItem> catalogo = (ArrayList<CatalogoItem>) ClienteEjecutable.enviarPaquete(new PaqueteTienda(token, PaqueteTienda.TipoPaqueteTienda.SOLICITAR_CATALOGO, null)).getArgs()[0];
 
         this.catalogo = catalogo;
     }
@@ -97,13 +92,13 @@ public class TiendaSesion {
             }
             // Cerrar sesión
             case 4 -> {
-                Cliente.repetir = true;
-                Cliente.enviarPaquete(new PaqueteCerrarSesion(user.getToken()));
+                ClienteEjecutable.repetir = true;
+                ClienteEjecutable.enviarPaquete(new PaqueteCerrarSesion(user.getToken()));
             }
             // Salir
             case 5 -> {
-                Cliente.repetir = false;
-                Cliente.enviarPaquete(new PaqueteCerrarSesion(user.getToken()));
+                ClienteEjecutable.repetir = false;
+                ClienteEjecutable.enviarPaquete(new PaqueteCerrarSesion(user.getToken()));
             }
         }
     }
@@ -118,7 +113,7 @@ public class TiendaSesion {
     }
 
     private void agregarCarrito(int item) {
-        PaqueteAbstractFactory paquete = Cliente.enviarPaquete(new PaqueteAgregarCarrito(user.getToken(), carrito.get(item)));
+        PaqueteAbstractFactory paquete = ClienteEjecutable.enviarPaquete(new PaqueteAgregarCarrito(user.getToken(), carrito.get(item)));
 
         if(paquete.getArgs()[0].equals("SUCCESSFUL")) {
             carrito.add(carrito.get(item));
@@ -135,7 +130,7 @@ public class TiendaSesion {
             return;
         }
 
-        PaqueteAbstractFactory respuesta = Cliente.enviarPaquete(new PaqueteTienda(user.getToken(), PaqueteTienda.TipoPaqueteTienda.COMPRA));
+        PaqueteAbstractFactory respuesta = ClienteEjecutable.enviarPaquete(new PaqueteTienda(user.getToken(), PaqueteTienda.TipoPaqueteTienda.COMPRA));
 
         if(respuesta.getArgs()[0].equals("SUCCESSFUL")) {
             interfaceUsuario.imprimirMensaje("Tu compra ha sido realizada exitosamente!\n\n");
@@ -151,7 +146,7 @@ public class TiendaSesion {
         sb.append("CheemsMart\nLa mejor tienda\n").append("No. Pedido: ").append(carrito.hashCode()).append('\n');
         sb.append("Has comprado:\n");
 
-        for(String s : carrito) {
+        for(CatalogoItem s : carrito) {
             sb.append('\t').append(s).append('\n');
         }
 

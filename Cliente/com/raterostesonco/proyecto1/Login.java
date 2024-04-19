@@ -16,6 +16,6 @@ public class Login {
     }
 
     public Optional<String> loggear() {
-        return Optional.ofNullable((String) Cliente.enviarPaquete(new PaqueteInicioSesion(usuario, contrasenia)).getArgs()[0]);
+        return Optional.ofNullable((String) ClienteEjecutable.enviarPaquete(new PaqueteInicioSesion(usuario, contrasenia)).getArgs()[0]);
     }
 }

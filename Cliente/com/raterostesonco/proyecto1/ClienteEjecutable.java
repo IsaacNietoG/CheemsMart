@@ -10,9 +10,9 @@ import java.util.Optional;
 /**
  * Cliente
  */
-public class Cliente {
+public class ClienteEjecutable {
     private static RemoteMessagePassing<PaqueteAbstractFactory> mensajeador;
-    private static final InterfaceUsuario interfaceUsuario = new InterfaceUsuario(new Cliente());
+    private static final InterfaceUsuario interfaceUsuario = new InterfaceUsuario(new ClienteEjecutable());
     public static boolean repetir = true;
 
     public static void main(String[] args) throws InterruptedException, IOException {
