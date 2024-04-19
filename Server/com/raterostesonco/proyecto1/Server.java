@@ -13,10 +13,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.function.Consumer;
 import java.util.LinkedList;
-import Server.com.raterostesonco.proyecto1.basedatos.Pais;
+
 /**
  * Ejecutable para iniciar el lado del servidor
  * <p>
@@ -46,54 +44,6 @@ public class Server {
 
     public static HashMap<String, Cliente> getSesionesActivas() {
         return sesionesActivas;
-    }
-
-    private static void startServer() {
-        try {
-            ServerSocket server = new ServerSocket(8080);
-            while (true) {
-                Socket s = server.accept();
-                RemoteMessagePassing<PaqueteAbstractFactory> rmp = new RemoteMessagePassing<>(s);
-                PaqueteAbstractFactory paquete = rmp.receive();
-
-                if (paquete instanceof PaqueteInicioSesion) {
-                    PaqueteInicioSesion paqueteA = (PaqueteInicioSesion) paquete;
-                    iniciarSesion((String) paqueteA.getArgs()[0], (String) paqueteA.getArgs()[1]);
-                } else if (paquete instanceof PaqueteAgregarCarrito) {
-                    PaqueteAgregarCarrito paqueteA = (PaqueteAgregarCarrito) paquete;
-
-                } else if (paquete instanceof PaqueteTienda) {
-                    PaqueteTienda paqueteA = (PaqueteTienda) paquete;
-
-                    if (paqueteA.getTipo().equals(PaqueteTienda.TipoPaqueteTienda.COMPRA.name())) {
-                        if (comprarCarrito(sesionesActivas.get(paqueteA.getToken()), (String) paqueteA.getArgs()[0])) {
-                            rmp.send(new PaqueteRespuesta(new Object[]{"SUCCESSFUL"}));
-                        } else {
-                            rmp.send(new PaqueteRespuesta(new Object[]{"UNSUCCESSFUL"}));
-                        }
-                    } else {
-                        ArrayList<String> envio = new ArrayList<>();
-                        recorrer(envio, BaseDeDatos.getCatalogo());
-
-                        rmp.send(new PaqueteRespuesta(envio.toArray()));
-                    }
-
-                } else if (paquete instanceof PaqueteSesionActiva) {
-                    PaqueteSesionActiva paqueteA = (PaqueteSesionActiva) paquete;
-                    rmp.send(new PaqueteRespuesta(new Object[]{sesionesActivas.containsKey(paqueteA.getToken())}));
-                } else if (paquete instanceof PaqueteCerrarSesion) {
-                    PaqueteCerrarSesion paqueteA = (PaqueteCerrarSesion) paquete;
-                    sesionesActivas.remove(paqueteA.getToken());
-                    BaseDeDatos.guardarBaseDatos();
-                    System.out.println("Cierre sesión registrado");
-                }
-
-                rmp.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private static boolean comprarCarrito(Cliente cliente, String intento) {
@@ -127,10 +77,6 @@ public class Server {
         }
 
         startServer();
-    }
-
-    public static HashMap<String, Cliente> getSesionesActivas() {
-        return sesionesActivas;
     }
 
     private static void startServer() {
