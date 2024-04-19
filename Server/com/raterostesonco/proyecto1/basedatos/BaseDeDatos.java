@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
 
+@SuppressWarnings("unchecked")
 /**
  * La base de datos del servidor, se encarga de almacenar los datos de los clientes y de los productos.
  *
@@ -16,6 +17,7 @@ import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
  * Los clientes se almacenan en un arbol AVL serializado que se carga y descarga al iniciar y cerrar el servidor. Los datos de los
  * usuarios de prueba se encuentran en el README
  */
+
 public class BaseDeDatos {
 
     private static ArbolAVL<Cliente> arbol;
@@ -28,19 +30,23 @@ public class BaseDeDatos {
      *  el código para solicitarla en la carga del Servidor.
      *  */
     public static void cargarBaseDatos(){
+
         String filename = "Server/com/raterostesonco/proyecto1/basedatos/arbol.ser";
 
         try{
             FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file);
 
-            @SuppressWarnings("unchecked")
-            this.arbol = (ArbolAVL<Cliente>)in.readObject();
+            arbol = (ArbolAVL<Cliente>)in.readObject();
 
             in.close();
             file.close();
         }catch(IOException e){
             System.out.println("IOException al cargar la base de datos");
+        }catch(ClassCastException e){
+
+        }catch(ClassNotFoundException e){
+
         }
     }
 

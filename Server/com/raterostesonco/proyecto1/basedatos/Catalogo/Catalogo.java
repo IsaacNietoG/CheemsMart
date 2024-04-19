@@ -75,16 +75,20 @@ public class Catalogo implements CatalogoComponent{
 
     /**
      *  Retorna el hijo con el indice especificado.
-     *  Si el indice es inválido, retorna un nulo.
      *
-     *  @param indice   el indice del hijo a retornar
+     *  @param indice   el indice del hijo a retornar, si es menor a 0 retorna un nulo, de la misma manera
+     *  si es mayor a la longitud de la lista de hijos, le va restando la longitud hasta que no lo sea.
      *
      *  @return el hijo con el indice especificado
      *  */
     @Override
     public CatalogoComponent getHijo(int indice) {
-        if(indice >= hijos.size() || indice < 0)
+        if(indice < 0)
             return null;
+
+        if(indice >= hijos.size())
+            while(indice > hijos.size())
+                indice -= hijos.size();
 
         return hijos.get(indice);
     }

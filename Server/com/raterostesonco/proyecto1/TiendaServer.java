@@ -3,8 +3,8 @@ package Server.com.raterostesonco.proyecto1;
 import java.util.Iterator;
 
 import Server.com.raterostesonco.proyecto1.basedatos.BankAccount;
-import Server.com.raterostesonco.proyecto1.basedatos.Catalogo;
-import Server.com.raterostesonco.proyecto1.basedatos.CatalogoItem;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
 import Server.com.raterostesonco.proyecto1.basedatos.NumeroDeCuentaInvalidoException;
 import Server.com.raterostesonco.proyecto1.basedatos.Pais;
@@ -28,21 +28,27 @@ public class TiendaServer implements Tienda{
     TiendaServer(Pais pais, Catalogo catalogo){
         switch(pais){
             case MEXICO:
-                generadorOfertas = GeneradorOfertasMX.getInstance();
+                generadorOfertas = GeneradorOfertasMX.getInstance(catalogo);
                 break;
-
+            case ESPANIA:
+                generadorOfertas = GeneradorOfertasES.getInstance(catalogo);
+                break;
+            case USA:
+                generadorOfertas = GeneradorOfertasUSA.getInstance(catalogo);
+                break;
         }
+        this.catalogo = catalogo;
     }
 
     @Override
     public int mostrarOpciones() {
-        // TODO Auto-generated method stub
-            return 0;
+        //Vive en el lado del cliente
+        return 0;
     }
 
     @Override
     public void mostrarCatalogo() {
-        // TODO Auto-generated method stub
+        //Vive en el lado del cliente
 
     }
 
@@ -84,7 +90,7 @@ public class TiendaServer implements Tienda{
             return false;
         }
         Iterator<CatalogoItem> iterador = cliente.getCarritoCompras().darIterador();
-        double cobro;
+        double cobro =0;
         while(iterador.hasNext()){
             CatalogoItem item = iterador.next();
             cobro += item.getPrecio();
