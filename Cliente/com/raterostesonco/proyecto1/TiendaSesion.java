@@ -1,7 +1,5 @@
 package Cliente.com.raterostesonco.proyecto1;
 
-<<<<<<< Updated upstream
-=======
 import Cliente.com.raterostesonco.proyecto1.communication.*;
 import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
@@ -9,7 +7,6 @@ import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
->>>>>>> Stashed changes
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -20,21 +17,16 @@ public class TiendaSesion {
     private Catalogo catalogo;
     private LinkedList<CatalogoItem> ofertasActivas;
 
-<<<<<<< Updated upstream
-
-    // Que cada cosa que se comunique tenga un abstractfactory para generar sus paquete, le pasas el token y ya de ahi te quedas con tu factory para hacer tus paquetes
-
     public TiendaSesion(User user) {
         this.user = user;
         interfaceUsuario = new InterfaceUsuario(this);
         carrito = new ArrayList<>();
 
-        // TODO Manda una solicitud al otro lado para obtener una copia del catalogo
+        actualizarCatalogo();
     }
 
     public void iniciar() {
         interfaceUsuario.imprimirMensaje("Bienvenido a CheemsMart %s!");
-=======
 
     public TiendaSesion(Cliente user, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas) {
         this.cliente = user;
@@ -45,8 +37,15 @@ public class TiendaSesion {
 
     public void iniciar() {
         interfaceUsuario.imprimirMensaje(String.format("Bienvenido a CheemsMart %s!", cliente.getName()));
->>>>>>> Stashed changes
+
         preguntarOpciones();
+    }
+
+    private void actualizarCatalogo() {
+        @SuppressWarnings("unchecked")
+        ArrayList<String> catalogo = (ArrayList<String>) Cliente.enviarPaquete(new PaqueteTienda(user.getToken(), PaqueteTienda.TipoPaqueteTienda.SOLICITAR_CATALOGO)).getArgs()[0];
+
+        this.catalogo = catalogo;
     }
 
     private void preguntarOpciones() {
@@ -98,12 +97,13 @@ public class TiendaSesion {
             }
             // Cerrar sesión
             case 4 -> {
-                // TODO en ambos mandar paquete cerrar sesión
                 Cliente.repetir = true;
+                Cliente.enviarPaquete(new PaqueteCerrarSesion(user.getToken()));
             }
             // Salir
             case 5 -> {
                 Cliente.repetir = false;
+                Cliente.enviarPaquete(new PaqueteCerrarSesion(user.getToken()));
             }
         }
     }
@@ -118,8 +118,14 @@ public class TiendaSesion {
     }
 
     private void agregarCarrito(int item) {
-        carrito.add(carrito.get(item));
-        // Mandar paquete agregar carrito
+        PaqueteAbstractFactory paquete = Cliente.enviarPaquete(new PaqueteAgregarCarrito(user.getToken(), carrito.get(item)));
+
+        if(paquete.getArgs()[0].equals("SUCCESSFUL")) {
+            carrito.add(carrito.get(item));
+            interfaceUsuario.imprimirMensaje("Item agregado correctamente");
+        } else {
+            interfaceUsuario.imprimirMensaje("Algo sucedió al agregar el item, intenta de nuevo");
+        }
     }
 
     private void comprarCarrito() {
@@ -129,6 +135,26 @@ public class TiendaSesion {
             return;
         }
 
+        PaqueteAbstractFactory respuesta = Cliente.enviarPaquete(new PaqueteTienda(user.getToken(), PaqueteTienda.TipoPaqueteTienda.COMPRA));
 
+        if(respuesta.getArgs()[0].equals("SUCCESSFUL")) {
+            interfaceUsuario.imprimirMensaje("Tu compra ha sido realizada exitosamente!\n\n");
+            imprimirTicket();
+            carrito.clear();
+        } else {
+            interfaceUsuario.imprimirMensaje("Algo sucedió al agregar el item, intenta de nuevo");
+        }
+    }
+
+    private void imprimirTicket() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("CheemsMart\nLa mejor tienda\n").append("No. Pedido: ").append(carrito.hashCode()).append('\n');
+        sb.append("Has comprado:\n");
+
+        for(String s : carrito) {
+            sb.append('\t').append(s).append('\n');
+        }
+
+        sb.append("Fecha estimada de entrega: ").append(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd/MM/yy")));
     }
 }

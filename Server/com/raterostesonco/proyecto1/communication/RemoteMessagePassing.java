@@ -1,9 +1,10 @@
-package Server.com.raterostesonco.proyecto1;
+package Server.com.raterostesonco.proyecto1.communication;
 
-import java.net.*;
-import java.io.*;
-
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.Socket;
 
 /*
 * Clase que modela el comportamiento de paso de mensajes remotos.
