@@ -1,5 +1,7 @@
 package Cliente.com.raterostesonco.proyecto1;
 
+import Cliente.com.raterostesonco.proyecto1.communication.PaqueteInicioSesion;
+
 import java.util.Optional;
 
 
@@ -13,8 +15,7 @@ public class Login {
         this.contrasenia = String.valueOf(contrasenia.hashCode());
     }
 
-    public Optional<User> loggear() {
-        // Hacer un paquete de logueo y esperar la respuesta
-        return Optional.empty();
+    public Optional<String> loggear() {
+        return Optional.ofNullable((String) Cliente.enviarPaquete(new PaqueteInicioSesion(usuario, contrasenia)).getArgs()[0]);
     }
 }
