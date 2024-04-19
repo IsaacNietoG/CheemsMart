@@ -108,14 +108,12 @@ public class Server {
         return new PaqueteRespuesta(new String[] {sessionFactory.darSesion(user, pass)});
     }
 
-    private static ArrayList<String> recorrer(ArrayList<String> lista, CatalogoComponent component){
+    private static void recorrer(ArrayList<String> lista, CatalogoComponent component){
 
         lista.add(component.toString());
         Iterator<CatalogoComponent> iterador = component.getIterador();
         while (iterador.hasNext()) {
             recorrer(lista, iterador.next());
         }
-
-        return lista;
     }
 }
