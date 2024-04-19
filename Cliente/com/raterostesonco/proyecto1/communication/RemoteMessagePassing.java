@@ -1,4 +1,4 @@
-package Cliente.com.raterostesonco.proyecto1;
+package Cliente.com.raterostesonco.proyecto1.communication;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
