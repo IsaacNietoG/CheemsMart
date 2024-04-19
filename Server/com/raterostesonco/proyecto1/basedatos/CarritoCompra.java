@@ -2,6 +2,7 @@ package Server.com.raterostesonco.proyecto1.basedatos;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 
 /**
  * Objeto que representa un carrito de compras
