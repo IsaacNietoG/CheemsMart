@@ -24,8 +24,14 @@ public class TiendaServer implements Tienda{
 
     GeneradorOfertas generadorOfertas;
     Catalogo catalogo;
+    public Pais pais;
 
+<<<<<<< Updated upstream
     TiendaServer(Pais pais, Catalogo catalogo){
+=======
+    public TiendaServer(Pais pais, Catalogo catalogo){
+        this.pais = pais;
+>>>>>>> Stashed changes
         switch(pais){
             case MEXICO:
                 generadorOfertas = GeneradorOfertasMX.getInstance(catalogo);
@@ -97,5 +103,9 @@ public class TiendaServer implements Tienda{
         }
         return cuentaBanco.cobrar(cobro);
 
+    }
+
+    public GeneradorOfertas darGeneradorOfertas(){
+        return generadorOfertas;
     }
 }

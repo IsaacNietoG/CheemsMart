@@ -1,6 +1,25 @@
 package Server.com.raterostesonco.proyecto1;
 
 import Server.com.raterostesonco.proyecto1.basedatos.BaseDeDatos;
+<<<<<<< Updated upstream
+=======
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoComponent;
+import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
+import Server.com.raterostesonco.proyecto1.basedatos.Pais;
+import Server.com.raterostesonco.proyecto1.communication.*;
+import Server.com.raterostesonco.proyecto1.communication.RemoteMessagePassing;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.function.Consumer;
+import java.util.LinkedList;
+import Server.com.raterostesonco.proyecto1.basedatos.Pais;
+>>>>>>> Stashed changes
 
 /**
  * Ejecutable para iniciar el lado del servidor
@@ -15,10 +34,98 @@ import Server.com.raterostesonco.proyecto1.basedatos.BaseDeDatos;
  */
 public class Server {
 
+<<<<<<< Updated upstream
+=======
+    private static final HashMap<String, Cliente> sesionesActivas = new HashMap<>();
+    private static LinkedList<TiendaServer> listaTiendas = new LinkedList<>();
+
+>>>>>>> Stashed changes
     public static void main(String[] args) {
         //Inicializado de base de datos
         BaseDeDatos.cargarBaseDatos();
         BaseDeDatos.cargarCatalogo();
 
+<<<<<<< Updated upstream
+=======
+        for(Pais pais : Pais.values()){
+            listaTiendas.add(new TiendaServer(pais, BaseDeDatos.getCatalogo()));
+        }
+
+        startServer();
+    }
+
+    public static HashMap<String, Cliente> getSesionesActivas() {
+        return sesionesActivas;
+    }
+
+    private static void startServer() {
+        try{
+            ServerSocket server = new ServerSocket(8080);
+            while(true){
+                Socket s = server.accept();
+                RemoteMessagePassing<PaqueteAbstractFactory> rmp = new RemoteMessagePassing<>(s);
+                PaqueteAbstractFactory paquete = rmp.receive();
+
+                if(paquete instanceof PaqueteInicioSesion) {
+                    PaqueteInicioSesion paqueteA = (PaqueteInicioSesion) paquete;
+                    iniciarSesion((String) paqueteA.getArgs()[0], (String) paqueteA.getArgs()[1]);
+                } else if (paquete instanceof PaqueteAgregarCarrito) {
+                    PaqueteAgregarCarrito paqueteA = (PaqueteAgregarCarrito) paquete;
+
+                } else if (paquete instanceof PaqueteTienda) {
+                    PaqueteTienda paqueteA = (PaqueteTienda) paquete;
+
+                    if(paqueteA.getTipo().equals(PaqueteTienda.TipoPaqueteTienda.COMPRA.name())) {
+                        if(comprarCarrito(sesionesActivas.get(paqueteA.getToken()))) {
+                            rmp.send(new PaqueteRespuesta(new Object[]{ "SUCCESSFUL" }));
+                        } else {
+                            rmp.send(new PaqueteRespuesta(new Object[]{ "UNSUCCESSFUL" }));
+                        }
+                    } else {
+                        ArrayList<String> envio = new ArrayList<>();
+                        recorrer(envio, BaseDeDatos.getCatalogo());
+
+                        rmp.send(new PaqueteRespuesta(envio.toArray()));
+                    }
+
+                } else if (paquete instanceof PaqueteSesionActiva) {
+                    PaqueteSesionActiva paqueteA = (PaqueteSesionActiva) paquete;
+                    rmp.send(new PaqueteRespuesta(new Object[]{ sesionesActivas.containsKey(paqueteA.getToken()) }));
+                } else if (paquete instanceof PaqueteCerrarSesion) {
+                    PaqueteCerrarSesion paqueteA = (PaqueteCerrarSesion) paquete;
+                    sesionesActivas.remove(paqueteA.getToken());
+                    BaseDeDatos.guardarBaseDatos();
+                    System.out.println("Cierre sesión registrado");
+                }
+
+                rmp.close();
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private static boolean comprarCarrito(Cliente cliente) {
+        if(cliente != null) {
+            double precio = 0;
+        }
+        return false;
+    }
+
+    private static PaqueteAbstractFactory iniciarSesion(String user, String pass) {
+        SessionFactory sessionFactory = new SessionFactory(listaTiendas);
+
+        return new PaqueteRespuesta(new String[] {sessionFactory.darSesion(user, pass)});
+    }
+
+    private static void recorrer(ArrayList<String> lista, CatalogoComponent component){
+
+        lista.add(component.toString());
+        Iterator<CatalogoComponent> iterador = component.getIterador();
+        while (iterador.hasNext()) {
+            recorrer(lista, iterador.next());
+        }
+>>>>>>> Stashed changes
     }
 }
