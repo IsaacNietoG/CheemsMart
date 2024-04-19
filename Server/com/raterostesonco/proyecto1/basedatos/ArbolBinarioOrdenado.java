@@ -16,50 +16,7 @@ import java.util.Stack;
  * </ul>
  */
 public class ArbolBinarioOrdenado<T extends Comparable<T>>
-        extends ArbolBinario<T>{
-
-    /* Clase interna privada para iteradores. */
-    private class Iterador implements Iterator<T> {
-
-        /* Pila para recorrer los vértices en DFS in-order. */
-        private Stack<Vertice> pila;
-
-        /* Inicializa al iterador. */
-        private Iterador() {
-            pila = new Stack<>();
-
-            if (!esVacia()) {
-                Vertice vertice = raiz;
-                while (vertice != null) {
-                    pila.push(vertice);
-                    vertice = vertice.izquierdo;
-                }
-            }
-        }
-
-        /* Nos dice si hay un elemento siguiente. */
-        @Override
-        public boolean hasNext() {
-            return !pila.empty();
-        }
-
-        /* Regresa el siguiente elemento en orden DFS in-order. */
-        @Override
-        public T next() {
-
-            Vertice retorno = pila.pop(), meter;
-
-            if (retorno.hayDerecho()) {
-                meter = retorno.derecho;
-                while (meter != null) {
-                    pila.push(meter);
-                    meter = meter.izquierdo;
-                }
-            }
-
-            return retorno.elemento;
-        }
-    }
+        extends ArbolBinario<T> {
 
     /**
      * El vértice del último elemento agegado. Este vértice sólo se puede
@@ -142,18 +99,17 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
      */
     @Override
     public void elimina(T elemento) {
-        if (contiene(elemento)){
+        if (contiene(elemento)) {
             Vertice verticeEliminar = vertice(busca(elemento));
             elementos--;
-            if (verticeEliminar.izquierdo != null && verticeEliminar.derecho != null){
+            if (verticeEliminar.izquierdo != null && verticeEliminar.derecho != null) {
                 Vertice verticeIntercambia = intercambiaEliminable(verticeEliminar);
                 eliminaVertice(verticeIntercambia);
-            }else{
+            } else {
                 eliminaVertice(verticeEliminar);
             }
         }
     }
-
 
     /**
      * Intercambia el elemento de un vértice con dos hijos distintos de
@@ -178,7 +134,7 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
     // Cuando queremos hacer intercambios de vertices cambiar la referencia del padre implica saber si el vertice es hijo izquierdo o derecho, esto lo hace por ti
     private void intercambiarHijo(Vertice padre, Vertice intercambio) {
 
-        if(intercambio != null) {
+        if (intercambio != null) {
             int comp = intercambio.get().compareTo(padre.get());
             if (comp <= 0) {
                 padre.izquierdo = intercambio;
@@ -209,19 +165,17 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
      */
     protected void eliminaVertice(Vertice vertice) {
         Vertice hijo = (vertice.izquierdo != null ? vertice.izquierdo : vertice.derecho);
-        if (vertice.padre != null){
+        if (vertice.padre != null) {
 
-            if (vertice.padre.izquierdo != null && vertice.padre.izquierdo.elemento == vertice.elemento){
+            if (vertice.padre.izquierdo != null && vertice.padre.izquierdo.elemento == vertice.elemento) {
                 vertice.padre.izquierdo = hijo;
-            }
-
-            else if (vertice.padre.derecho != null && vertice.padre.derecho.elemento == vertice.elemento){
+            } else if (vertice.padre.derecho != null && vertice.padre.derecho.elemento == vertice.elemento) {
                 vertice.padre.derecho = hijo;
             }
         } else {
             raiz = hijo;
         }
-        if (hijo != null){
+        if (hijo != null) {
             hijo.padre = vertice.padre;
         }
     }
@@ -241,7 +195,7 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
 
     private VerticeArbolBinario<T> busca(VerticeArbolBinario<T> vertice, T elemento) {
 
-        if(vertice == null) {
+        if (vertice == null) {
             return null;
         }
 
@@ -299,14 +253,13 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
         izquierdo.padre = girando.padre;
         girando.padre = izquierdo;
 
-        if (izquierdo.padre != null){
+        if (izquierdo.padre != null) {
             if (izquierdo.padre.izquierdo != null && izquierdo.padre.izquierdo.elemento == girando.elemento)
                 izquierdo.padre.izquierdo = izquierdo;
-            else if (izquierdo.padre.derecho != null && izquierdo.padre.derecho.elemento == girando.elemento){
+            else if (izquierdo.padre.derecho != null && izquierdo.padre.derecho.elemento == girando.elemento) {
                 izquierdo.padre.derecho = izquierdo;
             }
-        }
-        else {
+        } else {
             this.raiz = izquierdo;
         }
     }
@@ -334,16 +287,17 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
         derecho.padre = girando.padre;
         girando.padre = derecho;
 
-        if (derecho.padre != null){
+        if (derecho.padre != null) {
             if (derecho.padre.izquierdo != null && derecho.padre.izquierdo.elemento == girando.elemento)
                 derecho.padre.izquierdo = derecho;
-            else if (derecho.padre.derecho != null && derecho.padre.derecho.elemento == girando.elemento){
+            else if (derecho.padre.derecho != null && derecho.padre.derecho.elemento == girando.elemento) {
                 derecho.padre.derecho = derecho;
             }
-        }else{
+        } else {
             this.raiz = derecho;
         }
     }
+
     /**
      * Regresa un iterador para iterar el árbol. El árbol se itera en orden.
      *
@@ -352,6 +306,49 @@ public class ArbolBinarioOrdenado<T extends Comparable<T>>
     @Override
     public Iterator<T> iterator() {
         return new Iterador();
+    }
+
+    /* Clase interna privada para iteradores. */
+    private class Iterador implements Iterator<T> {
+
+        /* Pila para recorrer los vértices en DFS in-order. */
+        private Stack<Vertice> pila;
+
+        /* Inicializa al iterador. */
+        private Iterador() {
+            pila = new Stack<>();
+
+            if (!esVacia()) {
+                Vertice vertice = raiz;
+                while (vertice != null) {
+                    pila.push(vertice);
+                    vertice = vertice.izquierdo;
+                }
+            }
+        }
+
+        /* Nos dice si hay un elemento siguiente. */
+        @Override
+        public boolean hasNext() {
+            return !pila.empty();
+        }
+
+        /* Regresa el siguiente elemento en orden DFS in-order. */
+        @Override
+        public T next() {
+
+            Vertice retorno = pila.pop(), meter;
+
+            if (retorno.hayDerecho()) {
+                meter = retorno.derecho;
+                while (meter != null) {
+                    pila.push(meter);
+                    meter = meter.izquierdo;
+                }
+            }
+
+            return retorno.elemento;
+        }
     }
 }
 

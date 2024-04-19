@@ -3,17 +3,18 @@ package Server.com.raterostesonco.proyecto1.basedatos;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoComponent;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItemConcreto;
+
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Iterator;
-import java.io.IOException;
 
 /**
  * Herramienta para crear el catalogo
  */
 public class DevCreacionCatalogo {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
         Catalogo raiz = new Catalogo("Catalogo de CheemsMart");
 
         //Creacion de categorias
@@ -103,20 +104,20 @@ public class DevCreacionCatalogo {
         //Serializamos el catalogo
         String filename = "Server/com/raterostesonco/proyecto1/basedatos/catalogo.ser";
 
-        try{
+        try {
             FileOutputStream file = new FileOutputStream(filename);
             ObjectOutputStream out = new ObjectOutputStream(file);
 
             out.writeObject(raiz);
             out.close();
             file.close();
-        }catch(IOException e){
+        } catch (IOException e) {
             System.out.println("IOException al guardar el catalogo");
         }
 
     }
 
-    public static void recorrer(CatalogoComponent component){
+    public static void recorrer(CatalogoComponent component) {
         System.out.println(component);
         Iterator<CatalogoComponent> iterador = component.getIterador();
         while (iterador.hasNext()) {

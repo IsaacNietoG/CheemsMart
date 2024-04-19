@@ -1,35 +1,37 @@
 package Server.com.raterostesonco.proyecto1.basedatos;
 
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
+
 import java.util.Iterator;
 import java.util.LinkedList;
-import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 
 /**
  * Objeto que representa un carrito de compras
- *
+ * <p>
  * Es una envoltura jaja ):
  */
-public class CarritoCompra {
+public class CarritoCompra implements Iterable<CatalogoItem> {
 
     private LinkedList<CatalogoItem> lista;
 
-    CarritoCompra(){
+    CarritoCompra() {
         lista = new LinkedList<CatalogoItem>();
     }
 
-    public void agregar(CatalogoItem item){
+    public void agregar(CatalogoItem item) {
         lista.add(item);
     }
 
-    public void eliminar(CatalogoItem item){
+    public void eliminar(CatalogoItem item) {
         lista.remove(item);
     }
 
-    public void vaciar(){
+    public void vaciar() {
         lista.clear();
     }
 
-    public Iterator<CatalogoItem> darIterador(){
+    @Override
+    public Iterator<CatalogoItem> iterator() {
         return lista.iterator();
     }
 }

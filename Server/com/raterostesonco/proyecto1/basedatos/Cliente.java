@@ -6,17 +6,16 @@ import java.util.LinkedList;
 
 /**
  * El objeto que envuelve los datos de un cliente.
- *
+ * <p>
  * Este objeto solamente existe en dos lugares:
  * - Localmente, en el lado del cliente, aunque la modificación de sus campos en este lugar no importa
  * (se verifica la integridad de la información en el lado de Server)
  * - En el lado del Server, donde se almacena en la {@link BaseDeDatos} y se va enviando la referencia
  * a donde sea necesario
- *
  */
-public class Cliente implements Comparable<Cliente>, Serializable{
+public class Cliente implements Comparable<Cliente>, Serializable {
 
-	private String username;
+    private String username;
     private String password;
     private String name;
     private String telephone;
@@ -39,6 +38,7 @@ public class Cliente implements Comparable<Cliente>, Serializable{
     }
 
     /**
+
      *  Crea un objeto Cliente con solamente el campo de username llenado.
      *
      *  Este objeto es el que nos servirá como un comparable para poder luego encontrar
@@ -50,7 +50,7 @@ public class Cliente implements Comparable<Cliente>, Serializable{
         return new Cliente(id, null, null, null, null, null, null, null);
     }
 
-    public BankAccount getBankAccount(String intento) throws NumeroDeCuentaInvalidoException{
+    public BankAccount getBankAccount(String intento) throws NumeroDeCuentaInvalidoException {
         if (!this.bankAccount.verificarCuenta(intento))
             throw new NumeroDeCuentaInvalidoException();
         return bankAccount;

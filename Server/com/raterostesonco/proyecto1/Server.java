@@ -1,12 +1,12 @@
 package Server.com.raterostesonco.proyecto1;
 
 import Server.com.raterostesonco.proyecto1.basedatos.BaseDeDatos;
-import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoComponent;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
+import Server.com.raterostesonco.proyecto1.basedatos.NumeroDeCuentaInvalidoException;
 import Server.com.raterostesonco.proyecto1.basedatos.Pais;
 import Server.com.raterostesonco.proyecto1.communication.*;
-import Server.com.raterostesonco.proyecto1.communication.RemoteMessagePassing;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -19,9 +19,9 @@ import java.util.LinkedList;
 import Server.com.raterostesonco.proyecto1.basedatos.Pais;
 /**
  * Ejecutable para iniciar el lado del servidor
- *
+ * <p>
  * Realiza todas las tareas necesarias para levantar el servidor de CheemsMart y comenzar a recibir clientes, es decir:
- *
+ * <p>
  * - Carga la base de datos (con esto, los clientes y el catalogo)
  * - Inicializa el fabricador de sesiones para clientes
  * - Comienza a escuchar en un puerto definido por peticiones de clientes
@@ -49,14 +49,14 @@ public class Server {
     }
 
     private static void startServer() {
-        try{
+        try {
             ServerSocket server = new ServerSocket(8080);
-            while(true){
+            while (true) {
                 Socket s = server.accept();
                 RemoteMessagePassing<PaqueteAbstractFactory> rmp = new RemoteMessagePassing<>(s);
                 PaqueteAbstractFactory paquete = rmp.receive();
 
-                if(paquete instanceof PaqueteInicioSesion) {
+                if (paquete instanceof PaqueteInicioSesion) {
                     PaqueteInicioSesion paqueteA = (PaqueteInicioSesion) paquete;
                     iniciarSesion((String) paqueteA.getArgs()[0], (String) paqueteA.getArgs()[1]);
                 } else if (paquete instanceof PaqueteAgregarCarrito) {
@@ -65,11 +65,11 @@ public class Server {
                 } else if (paquete instanceof PaqueteTienda) {
                     PaqueteTienda paqueteA = (PaqueteTienda) paquete;
 
-                    if(paqueteA.getTipo().equals(PaqueteTienda.TipoPaqueteTienda.COMPRA.name())) {
-                        if(comprarCarrito(sesionesActivas.get(paqueteA.getToken()))) {
-                            rmp.send(new PaqueteRespuesta(new Object[]{ "SUCCESSFUL" }));
+                    if (paqueteA.getTipo().equals(PaqueteTienda.TipoPaqueteTienda.COMPRA.name())) {
+                        if (comprarCarrito(sesionesActivas.get(paqueteA.getToken()), (String) paqueteA.getArgs()[0])) {
+                            rmp.send(new PaqueteRespuesta(new Object[]{"SUCCESSFUL"}));
                         } else {
-                            rmp.send(new PaqueteRespuesta(new Object[]{ "UNSUCCESSFUL" }));
+                            rmp.send(new PaqueteRespuesta(new Object[]{"UNSUCCESSFUL"}));
                         }
                     } else {
                         ArrayList<String> envio = new ArrayList<>();
@@ -80,7 +80,7 @@ public class Server {
 
                 } else if (paquete instanceof PaqueteSesionActiva) {
                     PaqueteSesionActiva paqueteA = (PaqueteSesionActiva) paquete;
-                    rmp.send(new PaqueteRespuesta(new Object[]{ sesionesActivas.containsKey(paqueteA.getToken()) }));
+                    rmp.send(new PaqueteRespuesta(new Object[]{sesionesActivas.containsKey(paqueteA.getToken())}));
                 } else if (paquete instanceof PaqueteCerrarSesion) {
                     PaqueteCerrarSesion paqueteA = (PaqueteCerrarSesion) paquete;
                     sesionesActivas.remove(paqueteA.getToken());
@@ -90,15 +90,26 @@ public class Server {
 
                 rmp.close();
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    private static boolean comprarCarrito(Cliente cliente) {
-        if(cliente != null) {
+    private static boolean comprarCarrito(Cliente cliente, String intento) {
+        if (cliente != null) {
             double precio = 0;
+            for (CatalogoItem catalogoItem : cliente.getCarritoCompras()) {
+                precio += catalogoItem.getPrecio();
+            }
+
+            try {
+                cliente.getBankAccount(intento).cobrar(precio);
+                cliente.getCarritoCompras().vaciar();
+                return true;
+            } catch (NumeroDeCuentaInvalidoException e) {
+                return false;
+            }
         }
         return false;
     }
@@ -106,10 +117,10 @@ public class Server {
     private static PaqueteAbstractFactory iniciarSesion(String user, String pass) {
         SessionFactory sessionFactory = new SessionFactory();
 
-        return new PaqueteRespuesta(new String[] {sessionFactory.darSesion(user, pass)});
+        return new PaqueteRespuesta(new String[]{sessionFactory.darSesion(user, pass)});
     }
 
-    private static void recorrer(ArrayList<String> lista, CatalogoComponent component){
+    private static void recorrer(ArrayList<String> lista, CatalogoComponent component) {
 
         for(Pais pais : Pais.values()){
             listaTiendas.add(new TiendaServer(pais, BaseDeDatos.getCatalogo()));

@@ -25,7 +25,7 @@ public class SessionFactory {
 
         Cliente cliente = BaseDeDatos.getCliente(user);
 
-        if(cliente != null && contrasenia.hashCode() == Integer.parseInt(cliente.getPassword())) {
+        if (cliente != null && contrasenia.hashCode() == Integer.parseInt(cliente.getPassword())) {
             String token = generarToken(cliente);
             Server.getSesionesActivas().put(token, cliente);
 

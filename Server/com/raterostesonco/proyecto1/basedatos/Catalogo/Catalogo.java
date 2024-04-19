@@ -5,12 +5,12 @@ import java.util.Iterator;
 
 /**
  * Clase que representa un contenedor en el Catalogo
- *
+ * <p>
  * Puede ser una categoria que comprende varios items, o una categoria
  * que comprende subcategorias e items, o una categoria de más categorías
  * Las maravillas del composite :D
  */
-public class Catalogo implements CatalogoComponent{
+public class Catalogo implements CatalogoComponent {
 
     ArrayList<CatalogoComponent> hijos;
     String nombre;
@@ -22,27 +22,27 @@ public class Catalogo implements CatalogoComponent{
      * @param nombre   el nombre del catalogo a crear.
      * @param hijos    la lista de hijos
      */
-    public Catalogo(String nombre, ArrayList<CatalogoComponent> hijos){
+    public Catalogo(String nombre, ArrayList<CatalogoComponent> hijos) {
         this.nombre = nombre;
         this.hijos = hijos;
     }
 
     /**
-     *  Constructor por omisión de una lista de hijos, a falta de esta info inicia
-     *  la lista vacía.
-     *
-     *  Se usará sobre todo para la creación del catálogo ejemplo.
-     *  */
-    public Catalogo(String nombre){
+     * Constructor por omisión de una lista de hijos, a falta de esta info inicia
+     * la lista vacía.
+     * <p>
+     * Se usará sobre todo para la creación del catálogo ejemplo.
+     */
+    public Catalogo(String nombre) {
         this.nombre = nombre;
         hijos = new ArrayList<CatalogoComponent>();
     }
 
     /**
-     *  Añade un nuevo hijo a la lista de hijos del {@link Catalogo}
+     * Añade un nuevo hijo a la lista de hijos del {@link Catalogo}
      *
-     *  @param item   el nuevo hijo del catalogo
-     *  */
+     * @param item el nuevo hijo del catalogo
+     */
 
     @Override
     public void aniadir(CatalogoComponent item) {
@@ -51,20 +51,20 @@ public class Catalogo implements CatalogoComponent{
     }
 
     /**
-     *  Remueve un hijo de la lista. Para evitar perdida de información, si el hijo
-     *  tenia hijos, estos hijos pasan a ser de la instancia que llamó el método.
-     *  (le enjaretan los chamacos, vaya)
+     * Remueve un hijo de la lista. Para evitar perdida de información, si el hijo
+     * tenia hijos, estos hijos pasan a ser de la instancia que llamó el método.
+     * (le enjaretan los chamacos, vaya)
      *
-     *  @param removido   el hijo a remover
-     *  */
+     * @param removido el hijo a remover
+     */
     @Override
     public void remover(CatalogoComponent removido) {
-        if(!hijos.contains(removido))
+        if (!hijos.contains(removido))
             return;
 
         Iterator<CatalogoComponent> iteradorHijo = removido.getIterador();
-        if(iteradorHijo != null){
-            while(iteradorHijo.hasNext()){
+        if (iteradorHijo != null) {
+            while (iteradorHijo.hasNext()) {
                 hijos.add(iteradorHijo.next());
             }
         }
@@ -74,34 +74,33 @@ public class Catalogo implements CatalogoComponent{
     }
 
     /**
-     *  Retorna el hijo con el indice especificado.
+     * Retorna el hijo con el indice especificado.
      *
-     *  @param indice   el indice del hijo a retornar, si es menor a 0 retorna un nulo, de la misma manera
-     *  si es mayor a la longitud de la lista de hijos, le va restando la longitud hasta que no lo sea.
-     *
-     *  @return el hijo con el indice especificado
-     *  */
+     * @param indice el indice del hijo a retornar, si es menor a 0 retorna un nulo, de la misma manera
+     *               si es mayor a la longitud de la lista de hijos, le va restando la longitud hasta que no lo sea.
+     * @return el hijo con el indice especificado
+     */
     @Override
     public CatalogoComponent getHijo(int indice) {
-        if(indice < 0)
+        if (indice < 0)
             return null;
 
-        if(indice >= hijos.size())
-            while(indice > hijos.size())
+        if (indice >= hijos.size())
+            while (indice > hijos.size())
                 indice -= hijos.size();
 
         return hijos.get(indice);
     }
 
     /**
-     *  Busca recursivamente un elemento descendiente con el nombre indicado.
-     *  */
-    public CatalogoComponent busca(String nombre){
-        if(this.nombre.equals(nombre))
+     * Busca recursivamente un elemento descendiente con el nombre indicado.
+     */
+    public CatalogoComponent busca(String nombre) {
+        if (this.nombre.equals(nombre))
             return this;
         CatalogoComponent coincidencia = null;
-        for(CatalogoComponent hijo : hijos){
-            if(coincidencia != null)
+        for (CatalogoComponent hijo : hijos) {
+            if (coincidencia != null)
                 break;
             coincidencia = hijo.busca(nombre);
         }
@@ -110,24 +109,24 @@ public class Catalogo implements CatalogoComponent{
     }
 
     /**
-     *  Retorna el iterador de la lista interna de hijos.
+     * Retorna el iterador de la lista interna de hijos.
+     * <p>
+     * Esto para iteraciones manuales sobre el catálogo, por
+     * ejemplo, para crear el catálogo del cliente.
      *
-     *  Esto para iteraciones manuales sobre el catálogo, por
-     *  ejemplo, para crear el catálogo del cliente.
-     *
-     *  @return iterador de la lista de hijos
-     *  */
+     * @return iterador de la lista de hijos
+     */
     @Override
     public Iterator<CatalogoComponent> getIterador() {
         return hijos.iterator();
     }
 
     /**
-     *  @return el nombre del catalogo
-     *  */
+     * @return el nombre del catalogo
+     */
     @Override
     public String getNombre() {
-            return nombre;
+        return nombre;
     }
 
     @Override
