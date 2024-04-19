@@ -6,10 +6,16 @@ public class User {
     private Cliente cliente;
 
     public User(String token) {
-        // Con el token solicita los datos del usuario y los llena
         this.token = token;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public String getNombre() {
+        return null;
+    }
 
     // Una vez que tengo el token, lleno de este lado (cliente-side) los datos del cliente asociado a ese token
     private void llenarPerfil() {

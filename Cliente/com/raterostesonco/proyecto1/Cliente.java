@@ -1,6 +1,6 @@
 package Cliente.com.raterostesonco.proyecto1;
 
-import Cliente.com.raterostesonco.proyecto1.communication.Paquete;
+import Cliente.com.raterostesonco.proyecto1.communication.PaqueteAbstractFactory;
 import Cliente.com.raterostesonco.proyecto1.communication.RemoteMessagePassing;
 
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.util.Optional;
  * Cliente
  */
 public class Cliente {
-    private static RemoteMessagePassing<Paquete> mensajeador;
+    private static RemoteMessagePassing<PaqueteAbstractFactory> mensajeador;
     private static final InterfaceUsuario interfaceUsuario = new InterfaceUsuario(new Cliente());
     public static boolean repetir = true;
 
@@ -21,10 +21,16 @@ public class Cliente {
         // se ve más trucutrú xd
         Thread.sleep(3000);
 
+
+        mensajeador = new RemoteMessagePassing<>(new ServerSocket(8080).accept());
+
+
         while (repetir) {
             repetir = false;
             login();
         }
+
+        mensajeador.close();
     }
 
     public static void login() {
@@ -36,7 +42,7 @@ public class Cliente {
         });
     }
 
-    public static Paquete enviarPaquete(Paquete paquete) {
+    public static PaqueteAbstractFactory enviarPaquete(PaqueteAbstractFactory paquete) {
         mensajeador.send(paquete);
 
         return mensajeador.receive();

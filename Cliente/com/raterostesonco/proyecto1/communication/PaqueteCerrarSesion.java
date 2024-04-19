@@ -1,8 +1,8 @@
 package Cliente.com.raterostesonco.proyecto1.communication;
 
-public class PaqueteCerrarSesion extends Paquete {
+public class PaqueteCerrarSesion extends PaqueteAbstractFactory {
 
-    protected PaqueteCerrarSesion(String token) {
+    public PaqueteCerrarSesion(String token) {
         super(token, "CERRAR", null);
     }
 }
