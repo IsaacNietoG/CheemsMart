@@ -1,4 +1,6 @@
 package Cliente.com.raterostesonco.proyecto1.communication;
 
-public class Paquete {
+import java.io.Serializable;
+
+public abstract class Paquete implements Serializable {
 }
