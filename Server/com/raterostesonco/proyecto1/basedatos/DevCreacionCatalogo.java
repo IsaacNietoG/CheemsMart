@@ -98,11 +98,7 @@ public class DevCreacionCatalogo {
         raiz.aniadir(electronica);
 
         //Debug
-        Iterator<CatalogoComponent> iterador;
-        CatalogoComponent current;
-        while(iterador != null){
-
-        }
+        recorrer(raiz);
 
         //Serializamos el catalogo
         String filename = "Server/com/raterostesonco/proyecto1/basedatos/catalogo.ser";
@@ -118,5 +114,13 @@ public class DevCreacionCatalogo {
             System.out.println("IOException al guardar el catalogo");
         }
 
+    }
+
+    public static void recorrer(CatalogoComponent component){
+        System.out.println(component);
+        Iterator<CatalogoComponent> iterador = component.getIterador();
+        while (iterador.hasNext()) {
+            recorrer(iterador.next());
+        }
     }
 }
