@@ -35,7 +35,7 @@ public class BaseDeDatos {
             ObjectInputStream in = new ObjectInputStream(file);
 
             @SuppressWarnings("unchecked")
-            this.arbol = (ArbolAVL<Cliente>)in.readObject();
+            arbol = (ArbolAVL<Cliente>)in.readObject();
 
             in.close();
             file.close();

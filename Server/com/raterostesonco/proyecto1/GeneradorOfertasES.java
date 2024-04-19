@@ -45,7 +45,7 @@ public class GeneradorOfertasES implements GeneradorOfertas{
      *  */
     @Override
     public List<CatalogoItem> darOfertas(Cliente cliente) {
-        if(cliente.getCountry() != Pais.ESPAÑA)
+        if(cliente.getCountry() != Pais.ESPANIA)
             return null;
         LinkedList<CatalogoItem> ofertas;
 

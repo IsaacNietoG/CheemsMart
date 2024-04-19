@@ -3,7 +3,7 @@ package Server.com.raterostesonco.proyecto1;
 import java.util.Iterator;
 
 import Server.com.raterostesonco.proyecto1.basedatos.BankAccount;
-import Server.com.raterostesonco.proyecto1.basedatos.Catalogo;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
 import Server.com.raterostesonco.proyecto1.basedatos.CatalogoItem;
 import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
 import Server.com.raterostesonco.proyecto1.basedatos.NumeroDeCuentaInvalidoException;
@@ -25,7 +25,7 @@ public class TiendaServer implements Tienda{
     GeneradorOfertas generadorOfertas;
     Catalogo catalogo;
 
-    TiendaServer(Pais pais, Catalogo catalogo){
+    public TiendaServer(Pais pais, Catalogo catalogo){
         switch(pais){
             case MEXICO:
                 generadorOfertas = GeneradorOfertasMX.getInstance();

@@ -1,6 +1,16 @@
 package Server.com.raterostesonco.proyecto1;
 
 import Server.com.raterostesonco.proyecto1.basedatos.BaseDeDatos;
+import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
+import Server.com.raterostesonco.proyecto1.basedatos.Pais;
+import Server.com.raterostesonco.proyecto1.communication.PaqueteAbstractFactory;
+import Server.com.raterostesonco.proyecto1.communication.PaqueteRespuesta;
+import Server.com.raterostesonco.proyecto1.communication.RemoteMessagePassing;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
 
 /**
  * Ejecutable para iniciar el lado del servidor
@@ -15,10 +25,47 @@ import Server.com.raterostesonco.proyecto1.basedatos.BaseDeDatos;
  */
 public class Server {
 
-    public static void main(String[] args) {
-        //Inicializado de base de datos
-        BaseDeDatos.cargarBaseDatos();
-        BaseDeDatos.cargarCatalogo();
+    private static final HashMap<String, Cliente> sesionesActivas = new HashMap<>();
 
+    public static void main(String[] args) {
+        System.out.println("Iniciando servidor...");
+        BaseDeDatos.cargarCatalogo();
+        BaseDeDatos.cargarBaseDatos();
+
+        TiendaServer tiendaServerMexico = new TiendaServer(Pais.MEXICO, BaseDeDatos.getCatalogo()),
+                tiendaServerEspania = new TiendaServer(Pais.ESPANIA, BaseDeDatos.getCatalogo()),
+                tiendaServerUSA = new TiendaServer(Pais.USA, BaseDeDatos.getCatalogo());
+
+        startServer();
+    }
+
+    public static HashMap<String, Cliente> getSesionesActivas() {
+        return sesionesActivas;
+    }
+
+    private static void startServer() {
+        try{
+            ServerSocket server = new ServerSocket(8080);
+            while(true){
+                Socket s = server.accept();
+                Server.com.raterostesonco.proyecto1.communication.RemoteMessagePassing<PaqueteAbstractFactory> rmp = new RemoteMessagePassing<>(s);
+                PaqueteAbstractFactory paquete = rmp.receive();
+
+                switch (paquete) {
+                    default -> System.out.println();
+                }
+
+                rmp.close();
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private PaqueteAbstractFactory iniciarSesion(String user, String pass) {
+        SessionFactory sessionFactory = new SessionFactory();
+
+        return new PaqueteRespuesta(new String[] {sessionFactory.darSesion(user, pass)});
     }
 }
