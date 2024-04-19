@@ -2,7 +2,7 @@ package Server.com.raterostesonco.proyecto1;
 
 import java.util.List;
 
-import Server.com.raterostesonco.proyecto1.basedatos.CatalogoItem;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
 
 /**

@@ -16,7 +16,7 @@ import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
 import Server.com.raterostesonco.proyecto1.basedatos.Pais;
 
 /**
- * El generador de ofertas para la tienda Mexico
+ * El generador de ofertas para la tienda USA
  *
  * Implementa, como todos los generadores de ofertas, el modelo Singleton, ya que es necesario
  * que solo existe un generador de ofertas por país, para guardar registro de las ofertas que han sido
@@ -24,15 +24,15 @@ import Server.com.raterostesonco.proyecto1.basedatos.Pais;
  *
  * Asi mismo, tiene su propia logica de generacion de ofertas.
  */
-public class GeneradorOfertasMX implements GeneradorOfertas{
+public class GeneradorOfertasUSA implements GeneradorOfertas{
 
-    static GeneradorOfertasMX instance;
+    static GeneradorOfertasUSA instance;
     Map<Cliente, List<CatalogoItem>> sesionesOfertas;
     Catalogo catalogo;
     Random random = new Random();
 
     //Constructor privado, pues es singleton
-    private GeneradorOfertasMX(Catalogo catalogo){
+    private GeneradorOfertasUSA(Catalogo catalogo){
         sesionesOfertas = new HashMap<>();
         this.catalogo = catalogo;
     }
@@ -40,31 +40,31 @@ public class GeneradorOfertasMX implements GeneradorOfertas{
     //Singleton
     public static GeneradorOfertas getInstance(Catalogo catalogo) {
         if(instance == null)
-            instance = new GeneradorOfertasMX(catalogo);
+            instance = new GeneradorOfertasUSA(catalogo);
         return instance;
     }
 
     /**
      *  Genera un set de ofertas aleatorio para un cliente dado.
      *
-     *  Algoritmo personalizado para México. Genera entre 2-5 descuentos en la seccion de alimentos y que pueden oscilar
-     *  entre el 30 y el 50% de descuento
+     *  Algoritmo personalizado para USA. Genera 0 o 1 descuento en la seccion de electronicos y que pueden oscilar
+     *  entre el 50 y 60% de descuento
      *
      *  @return la lista de ofertas que poseerá el usuario para su sesión, si por alguna
      *  razón el cliente recibido no es del país, se retorna nulo
      *  */
     @Override
     public List<CatalogoItem> darOfertas(Cliente cliente) {
-        if(cliente.getCountry() != Pais.MEXICO)
+        if(cliente.getCountry() != Pais.USA)
             return null;
         LinkedList<CatalogoItem> ofertas = new LinkedList<>();
 
-        //Logica de descuentos en MX
-        CatalogoComponent candidatos = catalogo.busca("Alimentos");
-        int descuentos = random.nextInt(4)+2;
+        //Logica de descuentos en USA
+        CatalogoComponent candidatos = catalogo.busca("Electronica");
+        int descuentos = random.nextInt(1)+1;
         while (descuentos != 0){
             CatalogoItem eleccion = (CatalogoItem)aleatorio(candidatos);
-            CatalogoItemDescuento descuento = new CatalogoItemDescuento(eleccion, 0.3 + (0.5 - 0.3) * random.nextDouble());
+            CatalogoItemDescuento descuento = new CatalogoItemDescuento(eleccion, 0.5 + (0.6 - 0.5) * random.nextDouble());
             ofertas.add(descuento);
             descuentos--;
         }
