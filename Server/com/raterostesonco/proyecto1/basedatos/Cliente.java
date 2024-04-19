@@ -27,9 +27,6 @@ public class Cliente implements Comparable<Cliente>, Serializable{
     private LinkedList<String> historialSesiones;
     private CarritoCompra carritoCompras;
 
-    /**
-     *  TODO: Cambiar privacidad de este metodo cuando se terminen de crear los clientes de prueba.
-     *  */
     Cliente(String u, String pass, String name, String t, String dir, BankAccount bank, Pais pais, String id){
         username = u;
         password = pass;
@@ -42,7 +39,7 @@ public class Cliente implements Comparable<Cliente>, Serializable{
     }
 
     /**
-     *  Crea un objeto Cliente con solamente el campo de id llenado.
+     *  Crea un objeto Cliente con solamente el campo de username llenado.
      *
      *  Este objeto es el que nos servirá como un comparable para poder luego encontrar
      *  el objeto Cliente adecuado en la {@link BaseDeDatos}
@@ -50,7 +47,7 @@ public class Cliente implements Comparable<Cliente>, Serializable{
      *  @return un objecto Cliente con todos los campos vacíos excepto el de id.
      *  */
     public static Cliente darReferencia(String id){
-        return new Cliente(null, null, null, null, null, null, null, id);
+        return new Cliente(id, null, null, null, null, null, null, null);
     }
 
     public BankAccount getBankAccount(String intento) throws NumeroDeCuentaInvalidoException{
@@ -98,10 +95,10 @@ public class Cliente implements Comparable<Cliente>, Serializable{
     /**
      * Implementacion de compareTo
      *
-     * Los objetos Cliente son comparables entre si por su ID, para poder organizarlos en la {@link BaseDeDatos}
+     * Los objetos Cliente son comparables entre si por su username, para poder organizarlos en la {@link BaseDeDatos}
      */
     @Override
     public int compareTo(Cliente arg0) {
-            return id.compareTo(arg0.getId());
+            return username.compareTo(arg0.getUsername());
     }
 }
