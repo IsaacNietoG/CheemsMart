@@ -3,19 +3,36 @@ package Server.com.raterostesonco.proyecto1;
 import java.util.Iterator;
 
 import Server.com.raterostesonco.proyecto1.basedatos.BankAccount;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo;
 import Server.com.raterostesonco.proyecto1.basedatos.CatalogoItem;
 import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
 import Server.com.raterostesonco.proyecto1.basedatos.NumeroDeCuentaInvalidoException;
+import Server.com.raterostesonco.proyecto1.basedatos.Pais;
 
 /**
- * La clase abstracta para Tiendas del lado del servidor
+ * La clase para Tiendas del lado del servidor
  *
- * Esta clase modela todos los comportamientos en común que existen entre las diversas
- * tiendas, para que cada una de las tiendas que lo implementan solo deban de realizar los
- * ajustes pertinentes.
+ * Ya que todas las clases comparten practicamente todos los comportamientos, excepto el de la generacion
+ * de ofertas, cada tienda tiene su propia instancia de dicha clase (ver {@link GeneradorOfertas})
+ * y será guardada en el servidor. Aqui está el mapa de GeneradorOfertas para cada país. De esta manera,
+ * para crear una nueva tienda para otro país, basta con agregar su generador de ofertas aquí, y, obviamente,
+ * agregar el país en la enumeración {@link Server.com.raterostesonco.proyecto1.basedatos.Pais}
+ *
  * Aqui encontramos el patron de diseño Strategy
  */
-public abstract class TiendaAbstracta implements Tienda{
+public class TiendaServer implements Tienda{
+
+    GeneradorOfertas generadorOfertas;
+    Catalogo catalogo;
+
+    TiendaServer(Pais pais, Catalogo catalogo){
+        switch(pais){
+            case MEXICO:
+                generadorOfertas = GeneradorOfertasMX.getInstance();
+                break;
+
+        }
+    }
 
     @Override
     public int mostrarOpciones() {
@@ -29,10 +46,22 @@ public abstract class TiendaAbstracta implements Tienda{
 
     }
 
+    /**
+     *  Agrega al carrito del cliente un item dado.
+     *
+     *  Primero verifica con el GeneradorDeOFertas determinado si el item que se
+     *  desea agregar tiene una oferta vigente para el cliente. Si ese es el caso,
+     *  agrega la versión con descuento.
+     *
+     *  @param cliente    El cliente que desea agregar a su carrito el item.
+     *         item       El item que se desea agregar.
+     *
+     *  */
     @Override
     public void agregarCarrito(Cliente cliente, CatalogoItem item) {
+        CatalogoItem agregar = generadorOfertas.consultarOferta(cliente, item);
 
-
+        cliente.getCarritoCompras().agregar(agregar);
     }
 
     /**
