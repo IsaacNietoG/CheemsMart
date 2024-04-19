@@ -1,5 +1,6 @@
 package Server.com.raterostesonco.proyecto1.basedatos.Catalogo;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
@@ -8,16 +9,17 @@ import java.util.Iterator;
  * Modela todos los comportamientos necesarios para ser parte del catálogo.
  * En esencia, no se dan muchos metodos setters debido a que la implementacion actual
  * no necesita vigilar la integridad del catalogo, al menos en el lado del servidor, y en el
- * lado del cliente realmente no importa la integridad de los items de su copia.
+ * lado del cliente realmente no importa la integridad de los items de su copia. Desde aqui es serializable, por lo que
+ * todo el catálogo lo será
  */
-public interface CatalogoComponent {
+public interface CatalogoComponent extends Serializable{
 
     /**
      *  Metodo para añadir un nuevo hijo al componente
      *
      *  Si el componente es una hoja, se considera que se desea crear una nueva categoria de variantes del producto.
      *  */
-	public void añadir(CatalogoComponent item);
+	public void aniadir(CatalogoComponent item);
     /**
      *  Metodo para remover un hijo al componente
      *
@@ -37,6 +39,12 @@ public interface CatalogoComponent {
      * @return el iterador del componente, null si es hoja.
      */
     public Iterator<CatalogoComponent> getIterador();
+
+    /**
+     *  Busca recursivamente en los hijos un elemento con el nombre indicado y lo retorna. Se implementa igual en ambos
+     *  tipos de compuesto
+     *  */
+    public CatalogoComponent busca(String nombre);
 
     /**
      *  Da el nombre del componente.

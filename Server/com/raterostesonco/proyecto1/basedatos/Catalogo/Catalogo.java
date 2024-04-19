@@ -22,7 +22,7 @@ public class Catalogo implements CatalogoComponent{
      * @param nombre   el nombre del catalogo a crear.
      * @param hijos    la lista de hijos
      */
-    Catalogo(String nombre, ArrayList<CatalogoComponent> hijos){
+    public Catalogo(String nombre, ArrayList<CatalogoComponent> hijos){
         this.nombre = nombre;
         this.hijos = hijos;
     }
@@ -33,7 +33,7 @@ public class Catalogo implements CatalogoComponent{
      *
      *  Se usará sobre todo para la creación del catálogo ejemplo.
      *  */
-    Catalogo(String nombre){
+    public Catalogo(String nombre){
         this.nombre = nombre;
         hijos = new ArrayList<CatalogoComponent>();
     }
@@ -87,6 +87,22 @@ public class Catalogo implements CatalogoComponent{
             return null;
 
         return hijos.get(indice);
+    }
+
+    /**
+     *  Busca recursivamente un elemento descendiente con el nombre indicado.
+     *  */
+    public CatalogoComponent busca(String nombre){
+        if(this.nombre.equals(nombre))
+            return this;
+        CatalogoComponent coincidencia = null;
+        for(CatalogoComponent hijo : hijos){
+            if(coincidencia != null)
+                break;
+            coincidencia = hijo.busca(nombre);
+        }
+
+        return coincidencia;
     }
 
     /**

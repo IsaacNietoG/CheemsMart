@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
+
 /**
  * La base de datos del servidor, se encarga de almacenar los datos de los clientes y de los productos.
  *
@@ -17,7 +19,7 @@ import java.io.ObjectOutputStream;
 public class BaseDeDatos {
 
     private static ArbolAVL<Cliente> arbol;
-    //TODO integrar catalogo de productos
+    private static Catalogo catalogo;
 
     /**
      *  Deserealiza el arbol que contiene la información de los clientes.
@@ -69,9 +71,23 @@ public class BaseDeDatos {
      *  Deserealiza el catalogo de productos
      *
      *  La ruta se encuentra hardcodeada.
+     *  Nota: No existe un metodo para guardar catálogo, pero la implementación actual lo permitiría fácilmente
      *  */
     public static void cargarCatalogo(){
-        //TODO
+        String filename = "Server/com/raterostesonco/proyecto1/basedatos/catalogo.ser";
+
+        try{
+            FileInputStream file = new FileInputStream(filename);
+            ObjectInputStream in = new ObjectInputStream(file);
+
+            @SuppressWarnings("unchecked")
+            this.catalogo = (Catalogo)in.readObject();
+
+            in.close();
+            file.close();
+        }catch(IOException e){
+            System.out.println("IOException al cargar el catalogo");
+        }
     }
 
     /**
@@ -84,12 +100,9 @@ public class BaseDeDatos {
     }
 
     /**
-     *  Retorna una copia del catalogo
-     *
-     *  Se retorna una copia del catalogo que sea segura de modificar para evitar posibles modificaciones
-     *  accidentales al catálogo. De esta manera, el catálogo original no sale de la base de datos nunca.
+     *  Retorna el catalogo
      *  */
-    public static void getCatalogo(){
-        //TODO
+    public static Catalogo getCatalogo(){
+        return catalogo;
     }
 }
