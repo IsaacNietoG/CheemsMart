@@ -1,8 +1,8 @@
 package Cliente.com.raterostesonco.proyecto1.communication;
 
-public class PaqueteAgregarCarrito extends Paquete {
+public class PaqueteAgregarCarrito extends PaqueteAbstractFactory {
 
-    protected PaqueteAgregarCarrito(String token, String tipo, String codigo) {
-        super(token, tipo, new String[]{ codigo });
+    public PaqueteAgregarCarrito(String token, String codigo) {
+        super(token, "AGREGAR", new String[]{ codigo });
     }
 }
