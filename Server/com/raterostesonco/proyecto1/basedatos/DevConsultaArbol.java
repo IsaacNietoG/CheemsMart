@@ -2,8 +2,8 @@ package Server.com.raterostesonco.proyecto1.basedatos;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.ObjectInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 @SuppressWarnings("unchecked")
 /**
@@ -11,9 +11,9 @@ import java.io.IOException;
  */
 public class DevConsultaArbol {
 
-	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException{
+    public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
         String filename = "Server/com/raterostesonco/proyecto1/basedatos/arbol.ser";
-        ArbolAVL<Cliente> arbol= null;
+        ArbolAVL<Cliente> arbol = null;
 
         FileInputStream file = new FileInputStream(filename);
         ObjectInputStream in = new ObjectInputStream(file);

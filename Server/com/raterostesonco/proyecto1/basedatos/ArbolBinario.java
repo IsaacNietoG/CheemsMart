@@ -9,12 +9,247 @@ import java.util.NoSuchElementException;
  * <p>La clase proporciona las operaciones básicas para árboles binarios, pero
  * deja la implementación de varias en manos de las subclases concretas.</p>
  */
-public abstract class ArbolBinario<T> implements Coleccion<T> , Serializable{
+public abstract class ArbolBinario<T> implements Coleccion<T>, Serializable {
+
+    /**
+     * La raíz del árbol.
+     */
+    protected Vertice raiz;
+    /**
+     * El número de elementos
+     */
+    protected int elementos;
+    /**
+     * Constructor sin parámetros. Tenemos que definirlo para no perderlo.
+     */
+    public ArbolBinario() {
+    }
+
+    /**
+     * Construye un árbol binario a partir de una colección. El árbol binario
+     * tendrá los mismos elementos que la colección recibida.
+     *
+     * @param coleccion la colección a partir de la cual creamos el árbol
+     *                  binario.
+     */
+    public ArbolBinario(Coleccion<T> coleccion) {
+        for (T t : coleccion) {
+            agrega(t);
+        }
+    }
+
+    /**
+     * Construye un nuevo vértice, usando una instancia de {@link Vertice}. Para
+     * crear vértices se debe utilizar este método en lugar del operador
+     * <code>new</code>, para que las clases herederas de ésta puedan
+     * sobrecargarlo y permitir que cada estructura de árbol binario utilice
+     * distintos tipos de vértices.
+     *
+     * @param elemento el elemento dentro del vértice.
+     * @return un nuevo vértice con el elemento recibido dentro del mismo.
+     */
+    protected Vertice nuevoVertice(T elemento) {
+        return new Vertice(elemento);
+    }
+
+    /**
+     * Regresa la altura del árbol. La altura de un árbol es la altura de su
+     * raíz.
+     *
+     * @return la altura del árbol.
+     */
+    public int altura() {
+
+        if (raiz == null) {
+            return -1;
+        }
+
+        return raiz.altura();
+    }
+
+    /**
+     * Regresa el número de elementos que se han agregado al árbol.
+     *
+     * @return el número de elementos en el árbol.
+     */
+    @Override
+    public int getElementos() {
+        return elementos;
+    }
+
+    /**
+     * Nos dice si un elemento está en el árbol binario.
+     *
+     * @param elemento el elemento que queremos comprobar si está en el árbol.
+     * @return <code>true</code> si el elemento está en el árbol;
+     * <code>false</code> en otro caso.
+     */
+    @Override
+    public boolean contiene(T elemento) {
+        for (T v : this) {
+            if (v.equals(elemento)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Busca el vértice de un elemento en el árbol. Si no lo encuentra regresa
+     * <code>null</code>.
+     *
+     * @param elemento el elemento para buscar el vértice.
+     * @return un vértice que contiene el elemento buscado si lo encuentra;
+     * <code>null</code> en otro caso.
+     */
+    public VerticeArbolBinario<T> busca(T elemento) {
+        return buscar(raiz, elemento);
+    }
+
+    private VerticeArbolBinario<T> buscar(VerticeArbolBinario<T> vertice, T elemento) {
+
+        if (vertice != null && elemento != null) {
+            if (vertice.get().equals(elemento)) {
+                return vertice;
+            } else {
+                VerticeArbolBinario<T> izquierdo;
+                if ((izquierdo = buscar(vertice(vertice).izquierdo, elemento)) != null) {
+                    return izquierdo;
+                }
+
+                VerticeArbolBinario<T> derecho;
+                if ((derecho = buscar(vertice(vertice).derecho, elemento)) != null) {
+                    return derecho;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Regresa el vértice que contiene la raíz del árbol.
+     *
+     * @return el vértice que contiene la raíz del árbol.
+     * @throws NoSuchElementException si el árbol es vacío.
+     */
+    public VerticeArbolBinario<T> raiz() {
+        if (raiz == null)
+            throw new NoSuchElementException();
+        return raiz;
+    }
+
+    /**
+     * Nos dice si el árbol es vacío.
+     *
+     * @return <code>true</code> si el árbol es vacío, <code>false</code> en
+     * otro caso.
+     */
+    @Override
+    public boolean esVacia() {
+        return raiz == null;
+    }
+
+    /**
+     * Limpia el árbol de elementos, dejándolo vacío.
+     */
+    @Override
+    public void limpia() {
+        raiz = null;
+        elementos = 0;
+    }
+
+    /**
+     * Compara el árbol con un objeto.
+     *
+     * @param objeto el objeto con el que queremos comparar el árbol.
+     * @return <code>true</code> si el objeto recibido es un árbol binario y los
+     * árboles son iguales; <code>false</code> en otro caso.
+     */
+    @Override
+    public boolean equals(Object objeto) {
+        if (objeto == null || getClass() != objeto.getClass())
+            return false;
+        @SuppressWarnings("unchecked")
+        ArbolBinario<T> arbol = (ArbolBinario<T>) objeto;
+
+        if (raiz == null && arbol.raiz == null) {
+            return true;
+        }
+
+        if (raiz != null && arbol.raiz != null) {
+            return this.raiz.equals(arbol.raiz());
+        }
+
+        return false;
+    }
+
+    /**
+     * Regresa una representación en cadena del árbol.
+     *
+     * @return una representación en cadena del árbol.
+     */
+    @Override
+    public String toString() {
+        if (esVacia())
+            return "";
+        int[] array = new int[altura() + 1];
+        return toString(raiz, 0, array);
+    }
+
+    private String toString(Vertice vertice, int nivel, int[] a) {
+        String s = vertice.toString() + "\n";
+        a[nivel] = 1;
+        if (vertice.hayIzquierdo() && vertice.hayDerecho()) {
+            s += dibujaEspacios(nivel, a);
+            s += "├─›";
+            s += this.toString((Vertice) vertice.izquierdo(), nivel + 1, a);
+            s += dibujaEspacios(nivel, a);
+            s += "└─»";
+            a[nivel] = 0;
+            s += toString((Vertice) vertice.derecho(), nivel + 1, a);
+        } else if (vertice.hayIzquierdo()) {
+            s += dibujaEspacios(nivel, a);
+            s += "└─›";
+            a[nivel] = 0;
+            s += toString((Vertice) vertice.izquierdo(), nivel + 1, a);
+        } else if (vertice.hayDerecho()) {
+            s += dibujaEspacios(nivel, a);
+            s += "└─»";
+            a[nivel] = 0;
+            s += toString((Vertice) vertice.derecho(), nivel + 1, a);
+        }
+        return s;
+    }
+
+    private String dibujaEspacios(int l, int[] array) {
+        String s = "";
+        for (int i = 0; i < l; i++) {
+            if (array[i] == 1)
+                s += "│  ";
+            else
+                s += "   ";
+        }
+        return s;
+    }
+
+    /**
+     * Convierte el vértice (visto como instancia de {@link
+     * VerticeArbolBinario}) en vértice (visto como instancia de {@link
+     * Vertice}). Método auxiliar para hacer esta audición en un único lugar.
+     *
+     * @param vertice el vértice de árbol binario que queremos como vértice.
+     * @return el vértice recibido visto como vértice.
+     * @throws ClassCastException si el vértice no es instancia de {@link
+     *                            Vertice}.
+     */
+    protected Vertice vertice(VerticeArbolBinario<T> vertice) {
+        return (Vertice) vertice;
+    }
 
     /**
      * Clase interna protegida para vértices.
      */
-    protected class Vertice implements VerticeArbolBinario<T> , Serializable{
+    protected class Vertice implements VerticeArbolBinario<T>, Serializable {
 
         /**
          * El elemento del vértice.
@@ -189,241 +424,5 @@ public abstract class ArbolBinario<T> implements Coleccion<T> , Serializable{
         public String toString() {
             return elemento.toString();
         }
-    }
-
-    /**
-     * La raíz del árbol.
-     */
-    protected Vertice raiz;
-    /**
-     * El número de elementos
-     */
-    protected int elementos;
-
-    /**
-     * Constructor sin parámetros. Tenemos que definirlo para no perderlo.
-     */
-    public ArbolBinario() {
-    }
-
-    /**
-     * Construye un árbol binario a partir de una colección. El árbol binario
-     * tendrá los mismos elementos que la colección recibida.
-     *
-     * @param coleccion la colección a partir de la cual creamos el árbol
-     *                  binario.
-     */
-    public ArbolBinario(Coleccion<T> coleccion) {
-        for (T t : coleccion) {
-            agrega(t);
-        }
-    }
-
-    /**
-     * Construye un nuevo vértice, usando una instancia de {@link Vertice}. Para
-     * crear vértices se debe utilizar este método en lugar del operador
-     * <code>new</code>, para que las clases herederas de ésta puedan
-     * sobrecargarlo y permitir que cada estructura de árbol binario utilice
-     * distintos tipos de vértices.
-     *
-     * @param elemento el elemento dentro del vértice.
-     * @return un nuevo vértice con el elemento recibido dentro del mismo.
-     */
-    protected Vertice nuevoVertice(T elemento) {
-        return new Vertice(elemento);
-    }
-
-    /**
-     * Regresa la altura del árbol. La altura de un árbol es la altura de su
-     * raíz.
-     *
-     * @return la altura del árbol.
-     */
-    public int altura() {
-
-        if(raiz == null) {
-            return -1;
-        }
-
-        return raiz.altura();
-    }
-
-    /**
-     * Regresa el número de elementos que se han agregado al árbol.
-     *
-     * @return el número de elementos en el árbol.
-     */
-    @Override
-    public int getElementos() {
-        return elementos;
-    }
-
-    /**
-     * Nos dice si un elemento está en el árbol binario.
-     *
-     * @param elemento el elemento que queremos comprobar si está en el árbol.
-     * @return <code>true</code> si el elemento está en el árbol;
-     * <code>false</code> en otro caso.
-     */
-    @Override
-    public boolean contiene(T elemento) {
-        for (T v : this) {
-            if (v.equals(elemento)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Busca el vértice de un elemento en el árbol. Si no lo encuentra regresa
-     * <code>null</code>.
-     *
-     * @param elemento el elemento para buscar el vértice.
-     * @return un vértice que contiene el elemento buscado si lo encuentra;
-     * <code>null</code> en otro caso.
-     */
-    public VerticeArbolBinario<T> busca(T elemento) {
-        return buscar(raiz, elemento);
-    }
-
-    private VerticeArbolBinario<T> buscar(VerticeArbolBinario<T> vertice, T elemento) {
-
-        if(vertice != null && elemento != null) {
-            if (vertice.get().equals(elemento)) {
-                return vertice;
-            } else {
-                VerticeArbolBinario<T> izquierdo;
-                if ((izquierdo = buscar(vertice(vertice).izquierdo, elemento)) != null) {
-                    return izquierdo;
-                }
-
-                VerticeArbolBinario<T> derecho;
-                if ((derecho = buscar(vertice(vertice).derecho, elemento)) != null) {
-                    return derecho;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Regresa el vértice que contiene la raíz del árbol.
-     *
-     * @return el vértice que contiene la raíz del árbol.
-     * @throws NoSuchElementException si el árbol es vacío.
-     */
-    public VerticeArbolBinario<T> raiz() {
-        if (raiz == null)
-            throw new NoSuchElementException();
-        return raiz;
-    }
-
-    /**
-     * Nos dice si el árbol es vacío.
-     *
-     * @return <code>true</code> si el árbol es vacío, <code>false</code> en
-     * otro caso.
-     */
-    @Override
-    public boolean esVacia() {
-        return raiz == null;
-    }
-
-    /**
-     * Limpia el árbol de elementos, dejándolo vacío.
-     */
-    @Override
-    public void limpia() {
-        raiz = null;
-        elementos = 0;
-    }
-
-    /**
-     * Compara el árbol con un objeto.
-     *
-     * @param objeto el objeto con el que queremos comparar el árbol.
-     * @return <code>true</code> si el objeto recibido es un árbol binario y los
-     * árboles son iguales; <code>false</code> en otro caso.
-     */
-    @Override
-    public boolean equals(Object objeto) {
-        if (objeto == null || getClass() != objeto.getClass())
-            return false;
-        @SuppressWarnings("unchecked")
-        ArbolBinario<T> arbol = (ArbolBinario<T>) objeto;
-
-        if(raiz == null && arbol.raiz == null) {
-            return true;
-        }
-
-        if(raiz != null && arbol.raiz != null) {
-            return this.raiz.equals(arbol.raiz());
-        }
-
-        return false;
-    }
-
-    /**
-     * Regresa una representación en cadena del árbol.
-     *
-     * @return una representación en cadena del árbol.
-     */
-    @Override
-    public String toString() {
-        if (esVacia())
-            return "";
-        int[] array = new int[altura() + 1];
-        return toString(raiz, 0, array);
-    }
-
-    private String toString(Vertice vertice, int nivel, int[] a) {
-        String s = vertice.toString() + "\n";
-        a[nivel] = 1;
-        if (vertice.hayIzquierdo() && vertice.hayDerecho()) {
-            s += dibujaEspacios(nivel, a);
-            s += "├─›";
-            s += this.toString((Vertice) vertice.izquierdo(), nivel + 1, a);
-            s += dibujaEspacios(nivel, a);
-            s += "└─»";
-            a[nivel] = 0;
-            s += toString((Vertice) vertice.derecho(), nivel + 1, a);
-        } else if (vertice.hayIzquierdo()) {
-            s += dibujaEspacios(nivel, a);
-            s += "└─›";
-            a[nivel] = 0;
-            s += toString((Vertice) vertice.izquierdo(), nivel + 1, a);
-        } else if (vertice.hayDerecho()) {
-            s += dibujaEspacios(nivel, a);
-            s += "└─»";
-            a[nivel] = 0;
-            s += toString((Vertice) vertice.derecho(), nivel + 1, a);
-        }
-        return s;
-    }
-
-    private String dibujaEspacios(int l, int[] array) {
-        String s = "";
-        for (int i = 0; i < l; i++) {
-            if (array[i] == 1)
-                s += "│  ";
-            else
-                s += "   ";
-        }
-        return s;
-    }
-
-    /**
-     * Convierte el vértice (visto como instancia de {@link
-     * VerticeArbolBinario}) en vértice (visto como instancia de {@link
-     * Vertice}). Método auxiliar para hacer esta audición en un único lugar.
-     *
-     * @param vertice el vértice de árbol binario que queremos como vértice.
-     * @return el vértice recibido visto como vértice.
-     * @throws ClassCastException si el vértice no es instancia de {@link
-     *                            Vertice}.
-     */
-    protected Vertice vertice(VerticeArbolBinario<T> vertice) {
-        return (Vertice) vertice;
     }
 }

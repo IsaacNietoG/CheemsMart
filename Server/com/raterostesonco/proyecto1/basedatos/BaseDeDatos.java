@@ -1,12 +1,8 @@
 package Server.com.raterostesonco.proyecto1.basedatos;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
+
+import java.io.*;
 
 @SuppressWarnings("unchecked")
 /**
@@ -24,91 +20,91 @@ public class BaseDeDatos {
     private static Catalogo catalogo;
 
     /**
-     *  Deserealiza el arbol que contiene la información de los clientes.
-     *
-     *  La ruta al arbol, por motivos de facilidad está hardcodeadada, pero sería relativamente sencillo reestructurar
-     *  el código para solicitarla en la carga del Servidor.
-     *  */
-    public static void cargarBaseDatos(){
+     * Deserealiza el arbol que contiene la información de los clientes.
+     * <p>
+     * La ruta al arbol, por motivos de facilidad está hardcodeadada, pero sería relativamente sencillo reestructurar
+     * el código para solicitarla en la carga del Servidor.
+     */
+    public static void cargarBaseDatos() {
 
         String filename = "Server/com/raterostesonco/proyecto1/basedatos/arbol.ser";
 
-        try{
+        try {
             FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file);
 
-            arbol = (ArbolAVL<Cliente>)in.readObject();
+            arbol = (ArbolAVL<Cliente>) in.readObject();
 
             in.close();
             file.close();
-        }catch(IOException e){
+        } catch (IOException e) {
             System.out.println("IOException al cargar la base de datos");
-        }catch(ClassCastException e){
-
-        }catch(ClassNotFoundException e){
-
+        } catch (ClassCastException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     /**
-     *  Serializa nuevamente el arbol que contiene la información de los clientes.
-     *
-     *  Nuevamente, la ruta al arbol se encuentra hardcodeada.
-     *
-     *  Se realiza un guardado cada que se cierra el servidor, para asegurar que los cambios y compras realizadas
-     *  se puedan conservar entre sesiones.
-     *  */
-    public static void guardarBaseDatos(){
+     * Serializa nuevamente el arbol que contiene la información de los clientes.
+     * <p>
+     * Nuevamente, la ruta al arbol se encuentra hardcodeada.
+     * <p>
+     * Se realiza un guardado cada que se cierra el servidor, para asegurar que los cambios y compras realizadas
+     * se puedan conservar entre sesiones.
+     */
+    public static void guardarBaseDatos() {
         String filename = "Server/com/raterostesonco/proyecto1/basedatos/arbol.ser";
 
-        try{
+        try {
             FileOutputStream file = new FileOutputStream(filename);
             ObjectOutputStream out = new ObjectOutputStream(file);
 
             out.writeObject(arbol);
             out.close();
             file.close();
-        }catch(IOException e){
+        } catch (IOException e) {
             System.out.println("IOException al guardar la base de datos");
         }
     }
 
     /**
-     *  Deserealiza el catalogo de productos
-     *
-     *  La ruta se encuentra hardcodeada.
-     *  Nota: No existe un metodo para guardar catálogo, pero la implementación actual lo permitiría fácilmente
-     *  */
-    public static void cargarCatalogo(){
+     * Deserealiza el catalogo de productos
+     * <p>
+     * La ruta se encuentra hardcodeada.
+     * Nota: No existe un metodo para guardar catálogo, pero la implementación actual lo permitiría fácilmente
+     */
+    public static void cargarCatalogo() {
         String filename = "Server/com/raterostesonco/proyecto1/basedatos/catalogo.ser";
 
-        try{
+        try {
             FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file);
 
             @SuppressWarnings("unchecked")
-            this.catalogo = (Catalogo)in.readObject();
+                    catalogo = (Catalogo) in.readObject();
 
             in.close();
             file.close();
-        }catch(IOException e){
+        } catch (IOException e) {
             System.out.println("IOException al cargar el catalogo");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
     /**
-     *  Busca un cliente según su numero de ID
+     * Busca un cliente según su numero de ID
      *
-     *  @return el objeto Cliente deseado.
-     *  */
-    public static Cliente getCliente(String idString){
+     * @return el objeto Cliente deseado.
+     */
+    public static Cliente getCliente(String idString) {
         return arbol.busca(Cliente.darReferencia(idString)).get();
     }
 
     /**
-     *  Retorna el catalogo
-     *  */
-    public static Catalogo getCatalogo(){
+     * Retorna el catalogo
+     */
+    public static Catalogo getCatalogo() {
         return catalogo;
     }
 }
