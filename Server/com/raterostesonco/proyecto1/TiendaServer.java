@@ -25,7 +25,7 @@ public class TiendaServer implements Tienda{
     GeneradorOfertas generadorOfertas;
     Catalogo catalogo;
 
-    TiendaServer(Pais pais, Catalogo catalogo){
+    public TiendaServer(Pais pais, Catalogo catalogo){
         switch(pais){
             case MEXICO:
                 generadorOfertas = GeneradorOfertasMX.getInstance(catalogo);

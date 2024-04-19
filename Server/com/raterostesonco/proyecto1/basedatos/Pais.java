@@ -8,6 +8,6 @@ package Server.com.raterostesonco.proyecto1.basedatos;
 public enum Pais{
 
 	MEXICO,
-    ESPAÑA,
+    ESPANIA,
     USA
 }
