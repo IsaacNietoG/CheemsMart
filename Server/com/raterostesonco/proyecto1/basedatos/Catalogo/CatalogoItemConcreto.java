@@ -44,6 +44,6 @@ public class CatalogoItemConcreto extends CatalogoItem{
     @Override
     public String toString() {
         return "Nombre: " + getNombre() + "\nCodigo de Barras: " + getCodigoDeBarras()
-            + "Departamento: " + getDepartamento() + "\nPrecio: $" + getPrecio();
+            + " Departamento: " + getDepartamento() + "\nPrecio: $" + getPrecio();
     }
 }

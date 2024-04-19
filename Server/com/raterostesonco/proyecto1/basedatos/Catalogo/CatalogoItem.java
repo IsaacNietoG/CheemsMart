@@ -12,6 +12,23 @@ import java.util.Iterator;
  */
 public abstract class CatalogoItem implements CatalogoComponent{
 
+    public class NullIterator implements Iterator<CatalogoComponent>{
+        @Override
+        public boolean hasNext() {
+            return false;
+        }
+
+        @Override
+        public CatalogoComponent next() {
+            return null;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
     String nombre;
     Catalogo departamento;
 
@@ -48,12 +65,11 @@ public abstract class CatalogoItem implements CatalogoComponent{
     }
 
     /**
-     *  Retorna nulo por ser hoja, esto nos sirve externamente para detectar si un componente es Catalogo
-     *  u hoja
+     *  Retorna un iterador nulo para representar un caso base.
      *  */
     @Override
     public Iterator<CatalogoComponent> getIterador() {
-            return null;
+            return new NullIterator();
     }
 
     @Override

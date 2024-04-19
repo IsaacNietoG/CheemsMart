@@ -125,4 +125,9 @@ public class Catalogo implements CatalogoComponent{
     public String getNombre() {
             return nombre;
     }
+
+    @Override
+    public String toString() {
+        return "Categoria: " + getNombre();
+    }
 }
