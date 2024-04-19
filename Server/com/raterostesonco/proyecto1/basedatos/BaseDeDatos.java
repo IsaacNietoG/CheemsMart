@@ -93,7 +93,7 @@ public class BaseDeDatos {
     }
 
     /**
-     * Busca un cliente según su numero de ID
+     *  Busca un cliente según su username
      *
      * @return el objeto Cliente deseado.
      */

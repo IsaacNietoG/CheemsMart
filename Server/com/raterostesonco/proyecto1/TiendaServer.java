@@ -24,6 +24,7 @@ public class TiendaServer implements Tienda {
 
     GeneradorOfertas generadorOfertas;
     Catalogo catalogo;
+    public Pais pais;
 
     public TiendaServer(Pais pais, Catalogo catalogo) {
         switch (pais) {
@@ -95,5 +96,9 @@ public class TiendaServer implements Tienda {
         }
         return cuentaBanco.cobrar(cobro);
 
+    }
+
+    public GeneradorOfertas darGeneradorOfertas(){
+        return generadorOfertas;
     }
 }

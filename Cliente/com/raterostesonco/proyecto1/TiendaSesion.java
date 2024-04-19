@@ -1,16 +1,21 @@
 package Cliente.com.raterostesonco.proyecto1;
 
 import Cliente.com.raterostesonco.proyecto1.communication.*;
+import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class TiendaSesion {
 
-    private final User user;
-    private final InterfaceUsuario interfaceUsuario;
-    private ArrayList<String> catalogo, carrito;
+    private final Cliente cliente;
+    private InterfaceUsuario interfaceUsuario;
+    private Catalogo catalogo;
+    private LinkedList<CatalogoItem> ofertasActivas;
 
     public TiendaSesion(User user) {
         this.user = user;
@@ -21,7 +26,18 @@ public class TiendaSesion {
     }
 
     public void iniciar() {
-        interfaceUsuario.imprimirMensaje(String.format("Bienvenido a CheemsMart %s!", user.getNombre()));
+        interfaceUsuario.imprimirMensaje("Bienvenido a CheemsMart %s!");
+
+    public TiendaSesion(Cliente user, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas) {
+        this.cliente = user;
+        this.catalogo = catalogo;
+        this.ofertasActivas = ofertasActivas;
+
+    }
+
+    public void iniciar() {
+        interfaceUsuario.imprimirMensaje(String.format("Bienvenido a CheemsMart %s!", cliente.getName()));
+
         preguntarOpciones();
     }
 
