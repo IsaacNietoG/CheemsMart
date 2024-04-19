@@ -1,22 +1,25 @@
 package Cliente.com.raterostesonco.proyecto1;
 
+import Cliente.com.raterostesonco.proyecto1.communication.Paquete;
+import Cliente.com.raterostesonco.proyecto1.communication.RemoteMessagePassing;
+
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.Optional;
 
 /**
  * Cliente
  */
 public class Cliente {
-    private static String socket;
-    private static final InterfaceUsuario interfaceUsuario = new InterfaceUsuario(new Cliente.com.raterostesonco.proyecto1.Cliente());
-    public static boolean repetir = false;
+    private static RemoteMessagePassing<Paquete> mensajeador;
+    private static final InterfaceUsuario interfaceUsuario = new InterfaceUsuario(new Cliente());
+    public static boolean repetir = true;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         interfaceUsuario.imprimirMensaje("Inicializando cliente, por favor espere...");
 
         // se ve más trucutrú xd
         Thread.sleep(3000);
-
-        socket = interfaceUsuario.pedirEntrada("Ingresa el socket del servidor de tienda (puedes dejar en blanco si es local): ");
 
         while (repetir) {
             repetir = false;
@@ -25,11 +28,17 @@ public class Cliente {
     }
 
     public static void login() {
-        Optional<User> login = new Login(interfaceUsuario.pedirEntrada("Ingresa tu usuario: "), interfaceUsuario.pedirEntrada("Ingresa la contraseña: ")).loggear();
+        Optional<String> login = new Login(interfaceUsuario.pedirEntrada("Ingresa tu usuario: "), interfaceUsuario.pedirEntrada("Ingresa la contraseña: ")).loggear();
 
-        login.ifPresentOrElse((user -> new TiendaSesion(user).iniciar()), () -> {
+        login.ifPresentOrElse((user -> new TiendaSesion(new User(user)).iniciar()), () -> {
             interfaceUsuario.imprimirMensaje("El usuario ingresado no es válido");
             login();
         });
+    }
+
+    public static Paquete enviarPaquete(Paquete paquete) {
+        mensajeador.send(paquete);
+
+        return mensajeador.receive();
     }
 }
