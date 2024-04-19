@@ -56,6 +56,13 @@ public abstract class CatalogoItem implements CatalogoComponent{
             return null;
     }
 
+    @Override
+    public CatalogoComponent busca(String nombre) {
+        if(this.nombre.equals(nombre))
+            return (CatalogoComponent)this;
+        return null;
+    }
+
     public abstract int getCodigoDeBarras();
     public abstract String getNombre();
     public abstract Catalogo getDepartamento();

@@ -2,14 +2,17 @@ package Server.com.raterostesonco.proyecto1.basedatos.Catalogo;
 
 
 /**
- * CatalogoItemConcreto
+ * La clase concreta de un Catalogo Item.
+ *
+ * Dentro de aqui se guardan todos los datos del item del catalogo y los metodos implementados para lo mismo.
+ * Hablando de Decorator, esta seŕia la clase "Nucleo" más esencial de un posible objeto {@link CatalogoItemDescuento}
  */
 public class CatalogoItemConcreto extends CatalogoItem{
 
 	int codigoDeBarras;
     double precio;
 
-    CatalogoItemConcreto(int codigoDeBarras, String nombre, Catalogo padre, double precio){
+    public CatalogoItemConcreto(int codigoDeBarras, String nombre, Catalogo padre, double precio){
         this.codigoDeBarras = codigoDeBarras;
         this.nombre = nombre;
         this.departamento = padre;
@@ -37,6 +40,7 @@ public class CatalogoItemConcreto extends CatalogoItem{
 
     }
 
+    //To-String por default
     @Override
     public String toString() {
         return "Nombre: " + getNombre() + "\nCodigo de Barras: " + getCodigoDeBarras()
