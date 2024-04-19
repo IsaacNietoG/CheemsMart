@@ -1,16 +1,20 @@
 package Server.com.raterostesonco.proyecto1;
 
 import Server.com.raterostesonco.proyecto1.basedatos.BaseDeDatos;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoComponent;
 import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
 import Server.com.raterostesonco.proyecto1.basedatos.Pais;
-import Server.com.raterostesonco.proyecto1.communication.PaqueteAbstractFactory;
-import Server.com.raterostesonco.proyecto1.communication.PaqueteRespuesta;
+import Server.com.raterostesonco.proyecto1.communication.*;
 import Server.com.raterostesonco.proyecto1.communication.RemoteMessagePassing;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.function.Consumer;
 
 /**
  * Ejecutable para iniciar el lado del servidor
@@ -48,11 +52,39 @@ public class Server {
             ServerSocket server = new ServerSocket(8080);
             while(true){
                 Socket s = server.accept();
-                Server.com.raterostesonco.proyecto1.communication.RemoteMessagePassing<PaqueteAbstractFactory> rmp = new RemoteMessagePassing<>(s);
+                RemoteMessagePassing<PaqueteAbstractFactory> rmp = new RemoteMessagePassing<>(s);
                 PaqueteAbstractFactory paquete = rmp.receive();
 
-                switch (paquete) {
-                    default -> System.out.println();
+                if(paquete instanceof PaqueteInicioSesion) {
+                    PaqueteInicioSesion paqueteA = (PaqueteInicioSesion) paquete;
+                    iniciarSesion((String) paqueteA.getArgs()[0], (String) paqueteA.getArgs()[1]);
+                } else if (paquete instanceof PaqueteAgregarCarrito) {
+                    PaqueteAgregarCarrito paqueteA = (PaqueteAgregarCarrito) paquete;
+
+                } else if (paquete instanceof PaqueteTienda) {
+                    PaqueteTienda paqueteA = (PaqueteTienda) paquete;
+
+                    if(paqueteA.getTipo().equals(PaqueteTienda.TipoPaqueteTienda.COMPRA.name())) {
+                        if(comprarCarrito(sesionesActivas.get(paqueteA.getToken()))) {
+                            rmp.send(new PaqueteRespuesta(new Object[]{ "SUCCESSFUL" }));
+                        } else {
+                            rmp.send(new PaqueteRespuesta(new Object[]{ "UNSUCCESSFUL" }));
+                        }
+                    } else {
+                        ArrayList<String> envio = new ArrayList<>();
+                        recorrer(envio, BaseDeDatos.getCatalogo());
+
+                        rmp.send(new PaqueteRespuesta(envio.toArray()));
+                    }
+
+                } else if (paquete instanceof PaqueteSesionActiva) {
+                    PaqueteSesionActiva paqueteA = (PaqueteSesionActiva) paquete;
+                    rmp.send(new PaqueteRespuesta(new Object[]{ sesionesActivas.containsKey(paqueteA.getToken()) }));
+                } else if (paquete instanceof PaqueteCerrarSesion) {
+                    PaqueteCerrarSesion paqueteA = (PaqueteCerrarSesion) paquete;
+                    sesionesActivas.remove(paqueteA.getToken());
+                    BaseDeDatos.guardarBaseDatos();
+                    System.out.println("Cierre sesión registrado");
                 }
 
                 rmp.close();
@@ -63,9 +95,25 @@ public class Server {
 
     }
 
-    private PaqueteAbstractFactory iniciarSesion(String user, String pass) {
+    private static boolean comprarCarrito(Cliente cliente) {
+        if(cliente != null) {
+            double precio = 0;
+        }
+        return false;
+    }
+
+    private static PaqueteAbstractFactory iniciarSesion(String user, String pass) {
         SessionFactory sessionFactory = new SessionFactory();
 
         return new PaqueteRespuesta(new String[] {sessionFactory.darSesion(user, pass)});
+    }
+
+    private static void recorrer(ArrayList<String> lista, CatalogoComponent component){
+
+        lista.add(component.toString());
+        Iterator<CatalogoComponent> iterador = component.getIterador();
+        while (iterador.hasNext()) {
+            recorrer(lista, iterador.next());
+        }
     }
 }
