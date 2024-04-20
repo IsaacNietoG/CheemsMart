@@ -1,10 +1,7 @@
 package Cliente.com.raterostesonco.proyecto1.modelo;
 
-import Server.com.raterostesonco.proyecto1.basedatos.*;
-
 import java.io.Serializable;
 import java.util.LinkedList;
-
 
 /**
  * El objeto que envuelve los datos de un cliente.

@@ -80,8 +80,9 @@ public class BaseDeDatos {
             FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file);
 
-            @SuppressWarnings("unchecked")
-                    catalogo = (Catalogo) in.readObject();
+            @SuppressWarnings("unchecked") Catalogo catalogoA = (Catalogo) in.readObject();
+
+            catalogo = catalogoA;
 
             in.close();
             file.close();
@@ -93,7 +94,7 @@ public class BaseDeDatos {
     }
 
     /**
-     *  Busca un cliente según su username
+     * Busca un cliente según su username
      *
      * @return el objeto Cliente deseado.
      */

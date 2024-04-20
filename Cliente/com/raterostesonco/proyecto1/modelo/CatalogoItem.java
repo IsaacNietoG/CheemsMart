@@ -1,7 +1,5 @@
 package Cliente.com.raterostesonco.proyecto1.modelo;
 
-import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoComponent;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -26,6 +24,7 @@ public abstract class CatalogoItem implements CatalogoComponent {
     @Override
     public void aniadir(CatalogoComponent item) {
         ArrayList<CatalogoComponent> list = new ArrayList<>();
+        list.add("");
         list.add(this);
         list.add(item);
         this.departamento.remover(this);
@@ -71,7 +70,7 @@ public abstract class CatalogoItem implements CatalogoComponent {
 
     public abstract double getPrecio();
 
-    public class NullIterator implements Iterator<CatalogoComponent> {
+    private class NullIterator implements Iterator<CatalogoComponent> {
         @Override
         public boolean hasNext() {
             return false;

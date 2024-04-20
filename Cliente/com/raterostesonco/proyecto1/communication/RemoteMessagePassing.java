@@ -61,13 +61,11 @@ public class RemoteMessagePassing<T extends Serializable> {
 	    	try{
 	    		//Se interpreta el objeto que se leera en el ObjectInputStream in.
 	    		value = (T) in.readObject();
-	    	} catch (ClassNotFoundException e){
+	    	} catch (ClassNotFoundException | IOException e){
 	    		e.printStackTrace();
 	    	
-	    	} catch (IOException e){
-	    		e.printStackTrace();
 	    	}
-	    //}
+        //}
     	return value;
     }
 

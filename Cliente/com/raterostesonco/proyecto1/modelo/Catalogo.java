@@ -1,7 +1,5 @@
 package Cliente.com.raterostesonco.proyecto1.modelo;
 
-import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoComponent;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -49,7 +47,6 @@ public class Catalogo implements CatalogoComponent {
     @Override
     public void aniadir(CatalogoComponent item) {
         hijos.add(item);
-
     }
 
     /**

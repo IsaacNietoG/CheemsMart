@@ -29,15 +29,15 @@ import java.util.LinkedList;
 public class Server {
 
     private static final HashMap<String, Cliente> sesionesActivas = new HashMap<>();
-    private static LinkedList<TiendaServer> listaTiendas = new LinkedList<>();
+    private static final LinkedList<TiendaServer> listaTiendas = new LinkedList<>();
     public static void main(String[] args) {
         System.out.println("Iniciando servidor...");
         BaseDeDatos.cargarCatalogo();
         BaseDeDatos.cargarBaseDatos();
 
-        TiendaServer tiendaServerMexico = new TiendaServer(Pais.MEXICO, BaseDeDatos.getCatalogo()),
-                tiendaServerEspania = new TiendaServer(Pais.ESPANIA, BaseDeDatos.getCatalogo()),
-                tiendaServerUSA = new TiendaServer(Pais.USA, BaseDeDatos.getCatalogo());
+        for(Pais pais : Pais.values()){
+            listaTiendas.add(new TiendaServer(pais, BaseDeDatos.getCatalogo()));
+        }
 
         startServer();
     }
@@ -65,18 +65,14 @@ public class Server {
     }
 
     private static PaqueteAbstractFactory iniciarSesion(String user, String pass) {
-        SessionFactory sessionFactory = new SessionFactory();
+        SessionFactory sessionFactory = new SessionFactory(listaTiendas);
 
-        return new PaqueteRespuesta(new String[]{sessionFactory.darSesion(user, pass)});
+        return new PaqueteRespuesta(new Object[]{sessionFactory.darSesion(user, pass)});
     }
 
+
+    // TODO
     private static void recorrer(ArrayList<String> lista, CatalogoComponent component) {
-
-        for(Pais pais : Pais.values()){
-            listaTiendas.add(new TiendaServer(pais, BaseDeDatos.getCatalogo()));
-        }
-
-        startServer();
     }
 
     private static void startServer() {
@@ -87,17 +83,14 @@ public class Server {
                 RemoteMessagePassing<PaqueteAbstractFactory> rmp = new RemoteMessagePassing<>(s);
                 PaqueteAbstractFactory paquete = rmp.receive();
 
-                if(paquete instanceof PaqueteInicioSesion) {
-                    PaqueteInicioSesion paqueteA = (PaqueteInicioSesion) paquete;
+                if(paquete instanceof PaqueteInicioSesion paqueteA) {
                     iniciarSesion((String) paqueteA.getArgs()[0], (String) paqueteA.getArgs()[1]);
                 } else if (paquete instanceof PaqueteAgregarCarrito) {
                     PaqueteAgregarCarrito paqueteA = (PaqueteAgregarCarrito) paquete;
 
-                } else if (paquete instanceof PaqueteTienda) {
-                    PaqueteTienda paqueteA = (PaqueteTienda) paquete;
-
+                } else if (paquete instanceof PaqueteTienda paqueteA) {
                     if(paqueteA.getTipo().equals(PaqueteTienda.TipoPaqueteTienda.COMPRA.name())) {
-                        if(comprarCarrito(sesionesActivas.get(paqueteA.getToken()))) {
+                        if(comprarCarrito(sesionesActivas.get(paqueteA.getToken()), (String) paqueteA.getArgs()[0])) {
                             rmp.send(new PaqueteRespuesta(new Object[]{ "SUCCESSFUL" }));
                         } else {
                             rmp.send(new PaqueteRespuesta(new Object[]{ "UNSUCCESSFUL" }));
@@ -108,17 +101,13 @@ public class Server {
 
                         rmp.send(new PaqueteRespuesta(envio.toArray()));
                     }
-
-                } else if (paquete instanceof PaqueteSesionActiva) {
-                    PaqueteSesionActiva paqueteA = (PaqueteSesionActiva) paquete;
+                } else if (paquete instanceof PaqueteSesionActiva paqueteA) {
                     rmp.send(new PaqueteRespuesta(new Object[]{ sesionesActivas.containsKey(paqueteA.getToken()) }));
-                } else if (paquete instanceof PaqueteCerrarSesion) {
-                    PaqueteCerrarSesion paqueteA = (PaqueteCerrarSesion) paquete;
+                } else if (paquete instanceof PaqueteCerrarSesion paqueteA) {
                     sesionesActivas.remove(paqueteA.getToken());
                     BaseDeDatos.guardarBaseDatos();
                     System.out.println("Cierre sesión registrado");
                 }
-
                 rmp.close();
             }
         } catch (IOException e){

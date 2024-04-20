@@ -8,8 +8,6 @@ import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 import java.util.Random;
 import java.util.UUID;
 
-import Cliente.com.raterostesonco.proyecto1.TiendaSesion;
-
 public class SessionFactory {
 
     LinkedList<TiendaServer> tiendas;
@@ -34,7 +32,7 @@ public class SessionFactory {
             }
             LinkedList<CatalogoItem> ofertasActivas = (LinkedList<CatalogoItem>)tienda.darGeneradorOfertas().darOfertas(cliente);
 
-            return new TiendaSesion(cliente, tienda.catalogo, ofertasActivas);
+            return new TiendaSesion(cliente, token, tienda.catalogo, ofertasActivas);
         }
 
         return null;
