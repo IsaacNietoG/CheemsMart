@@ -1,19 +1,21 @@
 package Server.com.raterostesonco.proyecto1;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import Server.com.raterostesonco.proyecto1.basedatos.*;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoComponent;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 
-public class TiendaSesion {
-
+public class TiendaSesion implements Tienda {
     private final Cliente cliente;
     private String token;
+    private InterfaceUsuario interfaceUsuario;
     private Catalogo catalogo;
-    private LinkedList<CatalogoItem> carrito, ofertasActivas;
+    private ArrayList<CatalogoComponent> catalogoAuxiliar;
+    private int catalogoSize;
+    private LinkedList<CatalogoItem> ofertasActivas;
 
 
     public TiendaSesion(Cliente user, String token, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas) {
@@ -21,47 +23,41 @@ public class TiendaSesion {
         this.catalogo = catalogo;
         this.token = token;
         this.ofertasActivas = ofertasActivas;
-
-        // TODO token
     }
 
     public void iniciar() {
-        preguntarOpciones();
+        // Implementación en cliente
     }
 
-    private void setInterfaceUsuario(Object interfaceUsuario) {
+    void setInterfaceUsuario(InterfaceUsuario interfaceUsuario) {
+        // Implementación en cliente
     }
 
-    private void actualizarCatalogo() {
-//
+    public void mostrarOpciones() {
+        // Implementación en cliente
     }
 
-    private void preguntarOpciones() {
-
-       //
+    @Override
+    public void mostrarCatalogo() {
+        // Implementación en cliente
     }
 
-    private void imprimeCatalogo() {
-        //
+    private void mostrarCatalogo(CatalogoComponent catalogo, StringBuilder sb) {
+        // Implementación en cliente
     }
 
-    private void agregarCarrito(int item) {
-        // Vive en cliente
+    @Override
+    public void agregarCarrito(Cliente cliente, CatalogoItem item) {
+        // Implementación en cliente
     }
 
-    private void comprarCarrito() {
-        // Vive en cliente
+    @Override
+    public boolean hacerCompra(Cliente cliente, String cuenta) {
+        // Implementación en cliente
+        return false;
     }
 
     private void imprimirTicket() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("CheemsMart\nLa mejor tienda\n").append("No. Pedido: ").append(carrito.hashCode()).append('\n');
-        sb.append("Has comprado:\n");
-
-        for(CatalogoItem s : carrito) {
-            sb.append('\t').append(s).append('\n');
-        }
-
-        sb.append("Fecha estimada de entrega: ").append(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd/MM/yy")));
+        // Implementación en cliente
     }
 }

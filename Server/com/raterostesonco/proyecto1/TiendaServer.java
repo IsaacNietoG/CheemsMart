@@ -42,9 +42,8 @@ public class TiendaServer implements Tienda {
     }
 
     @Override
-    public int mostrarOpciones() {
+    public void mostrarOpciones() {
         //Vive en el lado del cliente
-        return 0;
     }
 
     @Override
