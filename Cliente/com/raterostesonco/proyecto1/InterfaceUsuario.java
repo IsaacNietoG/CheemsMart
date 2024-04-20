@@ -1,6 +1,7 @@
 package Cliente.com.raterostesonco.proyecto1;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class InterfaceUsuario implements Serializable {
