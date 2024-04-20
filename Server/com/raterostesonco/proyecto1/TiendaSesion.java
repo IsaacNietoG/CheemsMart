@@ -73,11 +73,7 @@ public class TiendaSesion implements Tienda {
                 Iterator<CatalogoComponent> iterator;
                 do{
                     iterator = recurse.getIterador();
-                    int i = 0;
-                    StringBuilder sb = new StringBuilder();
-                    while(iterator.hasNext()){
-                        sb.append(i++).append(".- ").append(recurse);
-                    }
+                    mostrarCategorias(recurse);
                     int seleccion;
                     try {
                         seleccion = Integer.parseInt(interfaceUsuario.pedirEntrada("valorProducto"));
@@ -126,10 +122,23 @@ public class TiendaSesion implements Tienda {
 
     }
 
+    private void mostrarCategorias(CatalogoComponent catalogo){
+        Iterator<CatalogoComponent> iterador = catalogo.getIterador();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Categoria: ");
+        sb.append(catalogo.getNombre());
+        sb.append("\n");
+        int i =0;
+        while (iterador.hasNext()){
+            sb.append(i + ".- " + iterador.next());
+        }
+        interfaceUsuario.imprimirMensaje(sb.toString());
+    }
+
     private void mostrarCatalogo(CatalogoComponent catalogo, StringBuilder sb) {
         Iterator<CatalogoComponent> iterador = catalogo.getIterador();
 
-        sb.append(catalogo);
+        sb.append(catalogo + "\n");
         while (iterador.hasNext()) {
             mostrarCatalogo(iterador.next(), sb);
         }
