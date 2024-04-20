@@ -16,7 +16,7 @@ public class ClienteEjecutable {
     private static final InterfaceUsuario interfaceUsuario = new InterfaceUsuario(new ClienteEjecutable());
     public static boolean repetir = true;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         interfaceUsuario.imprimirMensaje("Inicializando cliente, por favor espere...\n");
 
         while (repetir) {

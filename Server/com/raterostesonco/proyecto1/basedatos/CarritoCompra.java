@@ -2,6 +2,7 @@ package Server.com.raterostesonco.proyecto1.basedatos;
 
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -10,7 +11,7 @@ import java.util.LinkedList;
  * <p>
  * Es una envoltura jaja ):
  */
-public class CarritoCompra implements Iterable<CatalogoItem> {
+public class CarritoCompra implements Iterable<CatalogoItem>, Serializable {
 
     private LinkedList<CatalogoItem> lista;
 

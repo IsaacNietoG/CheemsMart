@@ -36,7 +36,7 @@ public class InterfaceUsuario implements Serializable {
     public void imprimirMensaje(String key) {
         String mensaje = diccionario == null ? key : diccionario.get(key);
         mensaje = mensaje == null ? key : mensaje;
-        System.out.printf("%s %s", prefix, mensaje);
+        System.out.printf("%s %s\n", prefix, mensaje);
     }
 
     /**

@@ -6,25 +6,26 @@ import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoComponent;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem.NullIterator;
-import Server.com.raterostesonco.proyecto1.communication.*;
-import Server.com.raterostesonco.proyecto1.basedatos.*;
+import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
+import Server.com.raterostesonco.proyecto1.communication.PaqueteAbstractFactory;
+import Server.com.raterostesonco.proyecto1.communication.PaqueteAgregarCarrito;
+import Server.com.raterostesonco.proyecto1.communication.PaqueteCerrarSesion;
+import Server.com.raterostesonco.proyecto1.communication.PaqueteTienda;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 public class TiendaSesion implements Tienda {
 
     private final Cliente cliente;
-    private String token;
+    private final String token;
     private InterfaceUsuario interfaceUsuario;
-    private Catalogo catalogo;
-    private ArrayList<CatalogoComponent> catalogoAuxiliar;
+    private final Catalogo catalogo;
     private HashMap<String, String> idioma;
-    private LinkedList<CatalogoItem> ofertasActivas;
+    private final LinkedList<CatalogoItem> ofertasActivas;
 
 
     public TiendaSesion(Cliente user, String token, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas, HashMap<String, String> idioma) {
@@ -33,7 +34,6 @@ public class TiendaSesion implements Tienda {
         this.token = token;
         this.ofertasActivas = ofertasActivas;
         this.idioma = idioma;
-        this.catalogoAuxiliar = new ArrayList<>();
     }
 
     public void iniciar() {
@@ -72,9 +72,9 @@ public class TiendaSesion implements Tienda {
 
                 CatalogoComponent recurse = catalogo;
                 Iterator<CatalogoComponent> iterator;
-                do{
+                do {
                     iterator = recurse.getIterador();
-                    if(iterator instanceof NullIterator)
+                    if (iterator instanceof NullIterator)
                         break;
                     mostrarCategorias(recurse);
                     int seleccion;
@@ -90,9 +90,10 @@ public class TiendaSesion implements Tienda {
                         interfaceUsuario.imprimirMensaje("valorInvalido");
 
                     }
-                }while(iterator.hasNext());
-                for(CatalogoItem item : ofertasActivas){
-                    if(item.getNombre().equals(recurse.getNombre()))
+                } while (iterator.hasNext());
+                for (CatalogoItem item : ofertasActivas) {
+                    System.out.println(item.getNombre() + "-");
+                    if (item.getNombre().equals(recurse.getNombre()))
                         recurse = item;
                 }
                 agregarCarrito(cliente, (CatalogoItem) recurse);
@@ -119,20 +120,20 @@ public class TiendaSesion implements Tienda {
     @Override
     public void mostrarCatalogo() {
         StringBuilder sb;
-        mostrarCatalogo(catalogo, sb =new StringBuilder());
+        mostrarCatalogo(catalogo, sb = new StringBuilder());
         interfaceUsuario.imprimirMensaje(sb.toString());
 
     }
 
-    private void mostrarCategorias(CatalogoComponent catalogo){
+    private void mostrarCategorias(CatalogoComponent catalogo) {
         Iterator<CatalogoComponent> iterador = catalogo.getIterador();
         StringBuilder sb = new StringBuilder();
         sb.append("Categoria: ");
         sb.append(catalogo.getNombre());
         sb.append("\n");
-        int i =0;
-        while (iterador.hasNext()){
-            sb.append(i + ".- " + iterador.next() + "\n");
+        int i = 0;
+        while (iterador.hasNext()) {
+            sb.append(i).append(".- ").append(iterador.next()).append("\n");
             i++;
         }
         interfaceUsuario.imprimirMensaje(sb.toString());
@@ -141,7 +142,7 @@ public class TiendaSesion implements Tienda {
     private void mostrarCatalogo(CatalogoComponent catalogo, StringBuilder sb) {
         Iterator<CatalogoComponent> iterador = catalogo.getIterador();
 
-        sb.append(catalogo + "\n");
+        sb.append(catalogo).append("\n");
         while (iterador.hasNext()) {
             mostrarCatalogo(iterador.next(), sb);
         }
@@ -190,5 +191,7 @@ public class TiendaSesion implements Tienda {
         }
 
         sb.append(interfaceUsuario.getClave("estimadaEntrega")).append(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd/MM/yy")));
+
+        interfaceUsuario.imprimirMensaje(sb.toString());
     }
 }

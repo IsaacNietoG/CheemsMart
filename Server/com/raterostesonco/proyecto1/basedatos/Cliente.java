@@ -24,7 +24,7 @@ public class Cliente implements Comparable<Cliente>, Serializable {
     private Pais country;
     private String id;
     private LinkedList<String> historialSesiones;
-    private CarritoCompra carritoCompras;
+    private final CarritoCompra carritoCompras;
 
     Cliente(String u, String pass, String name, String t, String dir, BankAccount bank, Pais pais, String id){
         username = u;
@@ -35,6 +35,8 @@ public class Cliente implements Comparable<Cliente>, Serializable {
         bankAccount = bank;
         this.country = pais;
         this.id = id;
+
+        carritoCompras = new CarritoCompra();
     }
 
     /**

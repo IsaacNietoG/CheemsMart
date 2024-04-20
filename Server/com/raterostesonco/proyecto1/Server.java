@@ -65,6 +65,7 @@ public class Server {
                 } else if (paquete instanceof PaqueteAgregarCarrito paqueteA) {
                     Cliente cliente = sesionesActivas.get(paqueteA.getToken());
                     cliente.getCarritoCompras().agregar((CatalogoItem) paqueteA.getArgs()[0]);
+                    rmp.send(new PaqueteRespuesta(new Object[]{ "SUCCESSFUL" }));
                 } else if (paquete instanceof PaqueteTienda paqueteA) {
                     Cliente cliente = sesionesActivas.get(paqueteA.getToken());
                     if (getTienda(cliente).hacerCompra(cliente, (String) paqueteA.getArgs()[0])) {
