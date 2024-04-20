@@ -85,7 +85,6 @@ public class TiendaSesion implements Tienda {
 
                     } catch (IllegalArgumentException e) {
                         interfaceUsuario.imprimirMensaje("valorInvalido");
-                }
 
                 }while(iterator.hasNext());
 
@@ -130,7 +129,8 @@ public class TiendaSesion implements Tienda {
         sb.append("\n");
         int i =0;
         while (iterador.hasNext()){
-            sb.append(i + ".- " + iterador.next());
+            sb.append(i + ".- " + iterador.next() + "\n");
+            i++;
         }
         interfaceUsuario.imprimirMensaje(sb.toString());
     }
