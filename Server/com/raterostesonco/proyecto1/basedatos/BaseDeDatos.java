@@ -97,7 +97,11 @@ public class BaseDeDatos {
      * @return el objeto Cliente deseado.
      */
     public static Cliente getCliente(String idString) {
-        return arbol.busca(Cliente.darReferencia(idString)).get();
+        VerticeArbolBinario<Cliente> target = arbol.busca(Cliente.darReferencia(idString));
+        if(target == null){
+            return null;
+        }
+        return target.get();
     }
 
     /**

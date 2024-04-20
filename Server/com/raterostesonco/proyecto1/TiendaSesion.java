@@ -22,7 +22,6 @@ public class TiendaSesion implements Tienda {
     private InterfaceUsuario interfaceUsuario;
     private Catalogo catalogo;
     private ArrayList<CatalogoComponent> catalogoAuxiliar;
-    private int catalogoSize;
     private HashMap<String, String> idioma;
     private LinkedList<CatalogoItem> ofertasActivas;
 
@@ -33,11 +32,12 @@ public class TiendaSesion implements Tienda {
         this.token = token;
         this.ofertasActivas = ofertasActivas;
         this.idioma = idioma;
+        this.catalogoAuxiliar = new ArrayList<>();
     }
 
     public void iniciar() {
         setInterfaceUsuario();
-        interfaceUsuario.imprimirMensaje(String.format(interfaceUsuario.getClave("bienvenida"), cliente.getName()));
+        interfaceUsuario.imprimirMensaje(String.format(interfaceUsuario.getClave("bienvenida") + "\n", cliente.getName()));
 
         mostrarOpciones();
     }
@@ -73,7 +73,7 @@ public class TiendaSesion implements Tienda {
                 try {
                     seleccion = Integer.parseInt(interfaceUsuario.pedirEntrada("valorProducto"));
 
-                    if (seleccion >= catalogoSize || seleccion < 0) {
+                    if (seleccion >= catalogoAuxiliar.size() || seleccion < 0) {
                         throw new IllegalArgumentException();
                     }
                     agregarCarrito(cliente, (CatalogoItem) catalogoAuxiliar.get(seleccion));
@@ -103,19 +103,22 @@ public class TiendaSesion implements Tienda {
 
     @Override
     public void mostrarCatalogo() {
-        catalogoSize = 0;
-        mostrarCatalogo(catalogo, new StringBuilder());
+        if(catalogoAuxiliar.isEmpty()) {
+            mostrarCatalogo(catalogo);
+        }
 
-        catalogoAuxiliar = new ArrayList<>();
+        int i = 0;
+        for (CatalogoComponent component : catalogoAuxiliar) {
+            interfaceUsuario.imprimirMensaje(i++ + ".- " + component + "\n");
+        }
     }
 
-    private void mostrarCatalogo(CatalogoComponent catalogo, StringBuilder sb) {
+    private void mostrarCatalogo(CatalogoComponent catalogo) {
         Iterator<CatalogoComponent> iterador = catalogo.getIterador();
 
-        sb.append(catalogoSize++).append(".- ").append(catalogo);
         catalogoAuxiliar.add(catalogo);
         while (iterador.hasNext()) {
-            mostrarCatalogo(iterador.next(), sb);
+            mostrarCatalogo(iterador.next());
         }
     }
 

@@ -5,6 +5,7 @@ import Server.com.raterostesonco.proyecto1.communication.*;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Optional;
 
 /**
@@ -18,14 +19,10 @@ public class ClienteEjecutable {
     public static void main(String[] args) throws IOException {
         interfaceUsuario.imprimirMensaje("Inicializando cliente, por favor espere...\n");
 
-        mensajeador = new RemoteMessagePassing<>(new Socket("localhost", 8080));
-
         while (repetir) {
             repetir = false;
             login();
         }
-
-        mensajeador.close();
     }
 
     public static void login() {
@@ -45,6 +42,13 @@ public class ClienteEjecutable {
     }
 
     public static PaqueteAbstractFactory enviarPaquete(PaqueteAbstractFactory paquete) {
+
+        try {
+            mensajeador = new RemoteMessagePassing<>(new Socket("localhost", 8080));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         mensajeador.send(paquete);
 
         return mensajeador.receive();
