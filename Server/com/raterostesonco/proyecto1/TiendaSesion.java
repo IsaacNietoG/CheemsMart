@@ -69,18 +69,35 @@ public class TiendaSesion implements Tienda {
             case 2 -> {
                 mostrarCatalogo();
 
-                int seleccion;
-                try {
-                    seleccion = Integer.parseInt(interfaceUsuario.pedirEntrada("valorProducto"));
-
-                    if (seleccion >= catalogoAuxiliar.size() || seleccion < 0) {
-                        throw new IllegalArgumentException();
+                CatalogoComponent recurse = catalogo;
+                Iterator<CatalogoComponent> iterator;
+                do{
+                    iterator = recurse.getIterador();
+                    int i = 0;
+                    StringBuilder sb = new StringBuilder();
+                    while(iterator.hasNext()){
+                        sb.append(i++).append(".- ").append(recurse);
                     }
-                    agregarCarrito(cliente, (CatalogoItem) catalogoAuxiliar.get(seleccion));
-                } catch (IllegalArgumentException e) {
-                    interfaceUsuario.imprimirMensaje("valorInvalido");
+                    int seleccion;
+                    try {
+                        seleccion = Integer.parseInt(interfaceUsuario.pedirEntrada("valorProducto"));
+
+                        if (seleccion >= catalogoSize || seleccion < 0) {
+                            throw new IllegalArgumentException();
+                        }
+                        recurse = recurse.getHijo(seleccion);
+
+                    } catch (IllegalArgumentException e) {
+                        interfaceUsuario.imprimirMensaje("valorInvalido");
                 }
 
+                }while(iterator.hasNext());
+
+                for(CatalogoItem item : ofertasActivas){
+                    if(item.getNombre().equals(recurse.getNombre()))
+                        recurse = item;
+                }
+                agregarCarrito(cliente, (CatalogoItem) recurse);
                 mostrarOpciones();
             }
             // Terminar compra
@@ -103,20 +120,14 @@ public class TiendaSesion implements Tienda {
 
     @Override
     public void mostrarCatalogo() {
-        if(catalogoAuxiliar.isEmpty()) {
-            mostrarCatalogo(catalogo);
-        }
-
-        int i = 0;
-        for (CatalogoComponent component : catalogoAuxiliar) {
-            interfaceUsuario.imprimirMensaje(i++ + ".- " + component + "\n");
-        }
+        StringBuilder sb;
+        mostrarCatalogo(catalogo, sb =new StringBuilder());
+        interfaceUsuario.imprimirMensaje(sb.toString());
     }
 
     private void mostrarCatalogo(CatalogoComponent catalogo) {
         Iterator<CatalogoComponent> iterador = catalogo.getIterador();
-
-        catalogoAuxiliar.add(catalogo);
+        sb.append(catalogoSize++).append(".- ").append(catalogo);
         while (iterador.hasNext()) {
             mostrarCatalogo(iterador.next());
         }
