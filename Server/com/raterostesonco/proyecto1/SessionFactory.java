@@ -5,7 +5,6 @@ import Server.com.raterostesonco.proyecto1.basedatos.BaseDeDatos;
 import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 
-import java.util.Random;
 import java.util.UUID;
 
 public class SessionFactory {

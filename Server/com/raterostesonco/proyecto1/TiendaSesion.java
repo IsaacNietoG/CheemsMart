@@ -22,7 +22,6 @@ public class TiendaSesion implements Tienda {
     private InterfaceUsuario interfaceUsuario;
     private Catalogo catalogo;
     private ArrayList<CatalogoComponent> catalogoAuxiliar;
-    private int catalogoSize;
     private HashMap<String, String> idioma;
     private LinkedList<CatalogoItem> ofertasActivas;
 
@@ -33,11 +32,12 @@ public class TiendaSesion implements Tienda {
         this.token = token;
         this.ofertasActivas = ofertasActivas;
         this.idioma = idioma;
+        this.catalogoAuxiliar = new ArrayList<>();
     }
 
     public void iniciar() {
         setInterfaceUsuario();
-        interfaceUsuario.imprimirMensaje(String.format(interfaceUsuario.getClave("bienvenida"), cliente.getName()));
+        interfaceUsuario.imprimirMensaje(String.format(interfaceUsuario.getClave("bienvenida") + "\n", cliente.getName()));
 
         mostrarOpciones();
     }
@@ -123,15 +123,13 @@ public class TiendaSesion implements Tienda {
         StringBuilder sb;
         mostrarCatalogo(catalogo, sb =new StringBuilder());
         interfaceUsuario.imprimirMensaje(sb.toString());
-
     }
 
-    private void mostrarCatalogo(CatalogoComponent catalogo, StringBuilder sb) {
+    private void mostrarCatalogo(CatalogoComponent catalogo) {
         Iterator<CatalogoComponent> iterador = catalogo.getIterador();
-
         sb.append(catalogoSize++).append(".- ").append(catalogo);
         while (iterador.hasNext()) {
-            mostrarCatalogo(iterador.next(), sb);
+            mostrarCatalogo(iterador.next());
         }
     }
 
