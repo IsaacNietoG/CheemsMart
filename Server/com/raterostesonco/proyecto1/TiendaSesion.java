@@ -124,6 +124,11 @@ public class TiendaSesion implements Tienda {
         interfaceUsuario.imprimirMensaje(sb.toString());
 
         interfaceUsuario.imprimirMensaje("ofertas");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (CatalogoComponent catalogoComponent : ofertasActivas) {
+            stringBuilder.append("\t- ").append(catalogoComponent.getNombre());
+        }
+        interfaceUsuario.imprimirMensaje(stringBuilder.toString());
     }
 
     private void mostrarCategorias(CatalogoComponent catalogo) {
