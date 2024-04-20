@@ -19,7 +19,7 @@ public class EspanolEspania {
                         3.- Comprar carrito
                         4.- Cerrar sesión
                         5.- Salir
-                    """).trim();
+                    """);
         diccionario.put("opcionValida", "Esa opción no es válida tío");
         diccionario.put("valorProducto", "Chaval, ingresa el valor del producto a comprar: ");
         diccionario.put("valorInvalido", "Ese valor no es válido tío");

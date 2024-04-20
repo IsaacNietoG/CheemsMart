@@ -19,7 +19,7 @@ public class EnglishUSA {
                         3.- Buy cart
                         4.- Logout
                         5.- Exit
-                    """).trim();
+                    """);
         diccionario.put("opcionValida", "Choose a valid option");
         diccionario.put("valorProducto", "Enter the ID value of the chosen product: ");
         diccionario.put("valorInvalido", "Enter a correct value");

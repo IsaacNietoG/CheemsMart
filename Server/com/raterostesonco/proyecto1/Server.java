@@ -9,7 +9,6 @@ import Server.com.raterostesonco.proyecto1.communication.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -28,12 +27,13 @@ public class Server {
 
     private static final HashMap<String, Cliente> sesionesActivas = new HashMap<>();
     private static final LinkedList<TiendaServer> listaTiendas = new LinkedList<>();
+
     public static void main(String[] args) {
         System.out.println("Iniciando servidor...");
         BaseDeDatos.cargarCatalogo();
         BaseDeDatos.cargarBaseDatos();
 
-        for(Pais pais : Pais.values()){
+        for (Pais pais : Pais.values()) {
             listaTiendas.add(new TiendaServer(pais, BaseDeDatos.getCatalogo()));
         }
 
@@ -51,30 +51,27 @@ public class Server {
     }
 
     private static void startServer() {
-        try{
+        try {
             ServerSocket server = new ServerSocket(8080);
-            while(true) {
+            while (true) {
                 Socket s = server.accept();
                 RemoteMessagePassing<PaqueteAbstractFactory> rmp = new RemoteMessagePassing<>(s);
                 PaqueteAbstractFactory paquete = rmp.receive();
+                System.out.println("Paquete recibido, " + paquete.getClass().getName());
 
-                if(paquete instanceof PaqueteInicioSesion paqueteA) {
+                if (paquete instanceof PaqueteInicioSesion paqueteA) {
                     rmp.send(iniciarSesion((String) paqueteA.getArgs()[0], (String) paqueteA.getArgs()[1]));
                     BaseDeDatos.cargarBaseDatos();
                 } else if (paquete instanceof PaqueteAgregarCarrito paqueteA) {
                     Cliente cliente = sesionesActivas.get(paqueteA.getToken());
                     cliente.getCarritoCompras().agregar((CatalogoItem) paqueteA.getArgs()[0]);
                 } else if (paquete instanceof PaqueteTienda paqueteA) {
-                    if(paqueteA.getTipo().equals(PaqueteTienda.TipoPaqueteTienda.COMPRA.name())) {
-                        Cliente cliente = sesionesActivas.get(paqueteA.getToken());
-                        if(getTienda(cliente).hacerCompra(cliente, (String) paqueteA.getArgs()[0])) {
-                            rmp.send(new PaqueteRespuesta(new Object[]{ "SUCCESSFUL" }));
-                        } else {
-                            rmp.send(new PaqueteRespuesta(new Object[]{ "UNSUCCESSFUL" }));
-                        }
+                    Cliente cliente = sesionesActivas.get(paqueteA.getToken());
+                    if (getTienda(cliente).hacerCompra(cliente, (String) paqueteA.getArgs()[0])) {
+                        rmp.send(new PaqueteRespuesta(new Object[]{"SUCCESSFUL"}));
+                    } else {
+                        rmp.send(new PaqueteRespuesta(new Object[]{"UNSUCCESSFUL"}));
                     }
-                } else if (paquete instanceof PaqueteSesionActiva paqueteA) {
-                    rmp.send(new PaqueteRespuesta(new Object[]{ sesionesActivas.containsKey(paqueteA.getToken()) }));
                 } else if (paquete instanceof PaqueteCerrarSesion paqueteA) {
                     sesionesActivas.remove(paqueteA.getToken());
                     BaseDeDatos.guardarBaseDatos();
@@ -82,7 +79,7 @@ public class Server {
                 }
                 rmp.close();
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -90,7 +87,7 @@ public class Server {
 
     private static TiendaServer getTienda(Cliente cliente) {
         for (TiendaServer tiendaServer : listaTiendas) {
-            if(tiendaServer.pais.equals(cliente.getCountry())) {
+            if (tiendaServer.pais.equals(cliente.getCountry())) {
                 return tiendaServer;
             }
         }

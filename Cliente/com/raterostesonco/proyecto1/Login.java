@@ -1,6 +1,7 @@
 package Cliente.com.raterostesonco.proyecto1;
 
-import Cliente.com.raterostesonco.proyecto1.communication.PaqueteInicioSesion;
+import Server.com.raterostesonco.proyecto1.TiendaSesion;
+import Server.com.raterostesonco.proyecto1.communication.PaqueteInicioSesion;
 
 import java.util.Optional;
 
