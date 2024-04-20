@@ -46,6 +46,6 @@ public class CatalogoItemDescuento extends CatalogoItem {
     @Override
     public String toString() {
         return "Nombre: " + original.getNombre() + "\nCodigo de Barras: " + getCodigoDeBarras()
-                + "Departamento: " + getDepartamento() + "\nPrecio: $" + original.getPrecio() + "(" + getPrecio() + ")";
+                + "\tDepartamento: " + getDepartamento() + "\nPrecio: $" + original.getPrecio() + "($" + getPrecio() + ")";
     }
 }

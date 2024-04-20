@@ -88,14 +88,14 @@ public class TiendaSesion implements Tienda {
 
                     } catch (IllegalArgumentException e) {
                         interfaceUsuario.imprimirMensaje("valorInvalido");
-
                     }
                 } while (iterator.hasNext());
+
                 for (CatalogoItem item : ofertasActivas) {
-                    System.out.println(item.getNombre() + "-");
                     if (item.getNombre().equals(recurse.getNombre()))
                         recurse = item;
                 }
+
                 agregarCarrito(cliente, (CatalogoItem) recurse);
                 mostrarOpciones();
             }
@@ -123,6 +123,7 @@ public class TiendaSesion implements Tienda {
         mostrarCatalogo(catalogo, sb = new StringBuilder());
         interfaceUsuario.imprimirMensaje(sb.toString());
 
+        interfaceUsuario.imprimirMensaje("ofertas");
     }
 
     private void mostrarCategorias(CatalogoComponent catalogo) {
@@ -132,10 +133,12 @@ public class TiendaSesion implements Tienda {
         sb.append(catalogo.getNombre());
         sb.append("\n");
         int i = 0;
+
         while (iterador.hasNext()) {
-            sb.append(i).append(".- ").append(iterador.next()).append("\n");
+            sb.append(i).append(".- ").append(iterador).append("\n");
             i++;
         }
+
         interfaceUsuario.imprimirMensaje(sb.toString());
     }
 
