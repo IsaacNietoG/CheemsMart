@@ -123,13 +123,15 @@ public class TiendaSesion implements Tienda {
         StringBuilder sb;
         mostrarCatalogo(catalogo, sb =new StringBuilder());
         interfaceUsuario.imprimirMensaje(sb.toString());
+
     }
 
-    private void mostrarCatalogo(CatalogoComponent catalogo) {
+    private void mostrarCatalogo(CatalogoComponent catalogo, StringBuilder sb) {
         Iterator<CatalogoComponent> iterador = catalogo.getIterador();
-        sb.append(catalogoSize++).append(".- ").append(catalogo);
+
+        sb.append(catalogo);
         while (iterador.hasNext()) {
-            mostrarCatalogo(iterador.next());
+            mostrarCatalogo(iterador.next(), sb);
         }
     }
 
