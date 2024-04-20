@@ -2,66 +2,51 @@ package Server.com.raterostesonco.proyecto1;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import Server.com.raterostesonco.proyecto1.basedatos.*;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 
-public class TiendaSesion {
+/**
+ *  La clase que representa TiendaSession del lado del Server.
+ *
+ *  Debido a que en el lado del server no es usada, nos interesa solamente que su construccion sea la adecuada, las implementaciones
+ *  de sus métodos no son relevantes en este lado, se dan en el lado del Cliente
+ *  */
+public class TiendaSesion implements Tienda{
 
     private final Cliente cliente;
     private String token;
     private Catalogo catalogo;
     private LinkedList<CatalogoItem> carrito, ofertasActivas;
+    private HashMap<String, String> idioma;
 
 
-    public TiendaSesion(Cliente user, String token, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas) {
+    public TiendaSesion(Cliente user, String token, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas, HashMap<String, String> idioma) {
         this.cliente = user;
         this.catalogo = catalogo;
         this.token = token;
         this.ofertasActivas = ofertasActivas;
-
-        // TODO token
+        this.idioma = idioma;
     }
 
-    public void iniciar() {
-        preguntarOpciones();
+    @Override
+    public int mostrarOpciones() {
+        return 0;
     }
 
-    private void setInterfaceUsuario(Object interfaceUsuario) {
+    @Override
+    public void mostrarCatalogo() {
     }
 
-    private void actualizarCatalogo() {
-//
+    @Override
+    public void agregarCarrito(Cliente cliente, CatalogoItem item) {
     }
 
-    private void preguntarOpciones() {
-
-       //
-    }
-
-    private void imprimeCatalogo() {
-        //
-    }
-
-    private void agregarCarrito(int item) {
-        // Vive en cliente
-    }
-
-    private void comprarCarrito() {
-        // Vive en cliente
-    }
-
-    private void imprimirTicket() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("CheemsMart\nLa mejor tienda\n").append("No. Pedido: ").append(carrito.hashCode()).append('\n');
-        sb.append("Has comprado:\n");
-
-        for(CatalogoItem s : carrito) {
-            sb.append('\t').append(s).append('\n');
-        }
-
-        sb.append("Fecha estimada de entrega: ").append(LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd/MM/yy")));
+    @Override
+    public boolean hacerCompra(Cliente cliente, String cuenta) {
+        return false;
     }
 }

@@ -3,10 +3,14 @@ package Server.com.raterostesonco.proyecto1;
 import Server.com.raterostesonco.proyecto1.basedatos.BankAccount;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
+import Server.com.raterostesonco.proyecto1.lenguajes.EnglishUSA;
+import Server.com.raterostesonco.proyecto1.lenguajes.EspanolEspania;
+import Server.com.raterostesonco.proyecto1.lenguajes.EspanolMX;
 import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
 import Server.com.raterostesonco.proyecto1.basedatos.NumeroDeCuentaInvalidoException;
 import Server.com.raterostesonco.proyecto1.basedatos.Pais;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -25,17 +29,21 @@ public class TiendaServer implements Tienda {
     GeneradorOfertas generadorOfertas;
     Catalogo catalogo;
     public Pais pais;
+    HashMap<String, String> idioma;
 
     public TiendaServer(Pais pais, Catalogo catalogo) {
         switch (pais) {
             case MEXICO:
                 generadorOfertas = GeneradorOfertasMX.getInstance(catalogo);
+                idioma = EspanolMX.getDiccionario();
                 break;
             case ESPANIA:
                 generadorOfertas = GeneradorOfertasES.getInstance(catalogo);
+                idioma = EspanolEspania.getDiccionario();
                 break;
             case USA:
                 generadorOfertas = GeneradorOfertasUSA.getInstance(catalogo);
+                idioma = EnglishUSA.getDiccionario();
                 break;
         }
         this.catalogo = catalogo;
@@ -100,5 +108,9 @@ public class TiendaServer implements Tienda {
 
     public GeneradorOfertas darGeneradorOfertas(){
         return generadorOfertas;
+    }
+
+    public HashMap<String, String> getIdioma(){
+        return idioma;
     }
 }
