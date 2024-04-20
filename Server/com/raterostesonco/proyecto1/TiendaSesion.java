@@ -5,6 +5,7 @@ import Cliente.com.raterostesonco.proyecto1.InterfaceUsuario;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoComponent;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
+import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem.NullIterator;
 import Server.com.raterostesonco.proyecto1.communication.*;
 import Server.com.raterostesonco.proyecto1.basedatos.*;
 
@@ -73,6 +74,8 @@ public class TiendaSesion implements Tienda {
                 Iterator<CatalogoComponent> iterator;
                 do{
                     iterator = recurse.getIterador();
+                    if(iterator instanceof NullIterator)
+                        break;
                     mostrarCategorias(recurse);
                     int seleccion;
                     try {
