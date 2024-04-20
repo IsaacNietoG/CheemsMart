@@ -20,6 +20,7 @@ public class EnglishUSA {
                         4.- Logout
                         5.- Exit
                     """);
+        diccionario.put("oferta" ,"You have special discounts only for today in this products: ");
         diccionario.put("opcionValida", "Choose a valid option");
         diccionario.put("valorProducto", "Enter the ID value of the chosen product: ");
         diccionario.put("valorInvalido", "Enter a correct value");

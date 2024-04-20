@@ -20,6 +20,7 @@ public class EspanolEspania {
                         4.- Cerrar sesión
                         5.- Salir
                     """);
+        diccionario.put("oferta" ,"Hay precios acojonantes para ti en estos productos chaval: ");
         diccionario.put("opcionValida", "Esa opción no es válida tío");
         diccionario.put("valorProducto", "Chaval, ingresa el valor del producto a comprar: ");
         diccionario.put("valorInvalido", "Ese valor no es válido tío");
