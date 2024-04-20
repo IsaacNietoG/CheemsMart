@@ -20,7 +20,7 @@ public class EspanolMX {
                         4.- Cerrar sesión
                         5.- Salir
                     """);
-        diccionario.put("oferta" ,"Tienes precios especiales solo por hoy en los siguientes productos: ");
+        diccionario.put("ofertas" ,"Tienes precios especiales solo por hoy en los siguientes productos: ");
         diccionario.put("opcionValida", "Digita una opción válida");
         diccionario.put("valorProducto", "Ingresa el valor del producto a comprar: ");
         diccionario.put("valorInvalido", "Introduce un valor válido");
@@ -32,6 +32,7 @@ public class EspanolMX {
         diccionario.put("pedido", "No. Pedido: ");
         diccionario.put("hasComprado", "Has comprado:\n");
         diccionario.put("estimadaEntrega", "Fecha estimada de entrega: ");
+        diccionario.put("seguridad", "Por seguridad, ingresa tu cuenta bancaria para continuar: ");
 
         return diccionario;
     }

@@ -90,18 +90,16 @@ public class TiendaSesion implements Tienda {
                         interfaceUsuario.imprimirMensaje("valorInvalido");
                     }
                 } while (iterator.hasNext());
-
                 for (CatalogoItem item : ofertasActivas) {
                     if (item.getNombre().equals(recurse.getNombre()))
                         recurse = item;
                 }
-
                 agregarCarrito(cliente, (CatalogoItem) recurse);
                 mostrarOpciones();
             }
             // Terminar compra
             case 3 -> {
-                hacerCompra(cliente, interfaceUsuario.pedirEntrada("Por seguridad, ingresa tu cuenta bancaria para continuar: "));
+                hacerCompra(cliente, interfaceUsuario.pedirEntrada("seguridad"));
                 mostrarOpciones();
             }
             // Cerrar sesión
@@ -126,7 +124,7 @@ public class TiendaSesion implements Tienda {
         interfaceUsuario.imprimirMensaje("ofertas");
         StringBuilder stringBuilder = new StringBuilder();
         for (CatalogoComponent catalogoComponent : ofertasActivas) {
-            stringBuilder.append("\t- ").append(catalogoComponent.getNombre());
+            stringBuilder.append("\t- ").append(catalogoComponent.getNombre()).append("\n");
         }
         interfaceUsuario.imprimirMensaje(stringBuilder.toString());
     }
@@ -140,7 +138,7 @@ public class TiendaSesion implements Tienda {
         int i = 0;
 
         while (iterador.hasNext()) {
-            sb.append(i).append(".- ").append(iterador).append("\n");
+            sb.append(i).append(".- ").append(iterador.next()).append("\n");
             i++;
         }
 
