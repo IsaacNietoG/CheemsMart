@@ -69,18 +69,35 @@ public class TiendaSesion implements Tienda {
             case 2 -> {
                 mostrarCatalogo();
 
-                int seleccion;
-                try {
-                    seleccion = Integer.parseInt(interfaceUsuario.pedirEntrada("valorProducto"));
-
-                    if (seleccion >= catalogoSize || seleccion < 0) {
-                        throw new IllegalArgumentException();
+                CatalogoComponent recurse = catalogo;
+                Iterator<CatalogoComponent> iterator;
+                do{
+                    iterator = recurse.getIterador();
+                    int i = 0;
+                    StringBuilder sb = new StringBuilder();
+                    while(iterator.hasNext()){
+                        sb.append(i++).append(".- ").append(recurse);
                     }
-                    agregarCarrito(cliente, (CatalogoItem) catalogoAuxiliar.get(seleccion));
-                } catch (IllegalArgumentException e) {
-                    interfaceUsuario.imprimirMensaje("valorInvalido");
+                    int seleccion;
+                    try {
+                        seleccion = Integer.parseInt(interfaceUsuario.pedirEntrada("valorProducto"));
+
+                        if (seleccion >= catalogoSize || seleccion < 0) {
+                            throw new IllegalArgumentException();
+                        }
+                        recurse = recurse.getHijo(seleccion);
+
+                    } catch (IllegalArgumentException e) {
+                        interfaceUsuario.imprimirMensaje("valorInvalido");
                 }
 
+                }while(iterator.hasNext());
+
+                for(CatalogoItem item : ofertasActivas){
+                    if(item.getNombre().equals(recurse.getNombre()))
+                        recurse = item;
+                }
+                agregarCarrito(cliente, (CatalogoItem) recurse);
                 mostrarOpciones();
             }
             // Terminar compra
@@ -103,17 +120,16 @@ public class TiendaSesion implements Tienda {
 
     @Override
     public void mostrarCatalogo() {
-        catalogoSize = 0;
-        mostrarCatalogo(catalogo, new StringBuilder());
+        StringBuilder sb;
+        mostrarCatalogo(catalogo, sb =new StringBuilder());
+        interfaceUsuario.imprimirMensaje(sb.toString());
 
-        catalogoAuxiliar = new ArrayList<>();
     }
 
     private void mostrarCatalogo(CatalogoComponent catalogo, StringBuilder sb) {
         Iterator<CatalogoComponent> iterador = catalogo.getIterador();
 
         sb.append(catalogoSize++).append(".- ").append(catalogo);
-        catalogoAuxiliar.add(catalogo);
         while (iterador.hasNext()) {
             mostrarCatalogo(iterador.next(), sb);
         }
