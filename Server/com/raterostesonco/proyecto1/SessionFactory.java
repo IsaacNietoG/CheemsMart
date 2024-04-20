@@ -32,7 +32,7 @@ public class SessionFactory {
             }
             LinkedList<CatalogoItem> ofertasActivas = (LinkedList<CatalogoItem>)tienda.darGeneradorOfertas().darOfertas(cliente);
 
-            return new TiendaSesion(cliente, token, tienda.catalogo, ofertasActivas);
+            return new TiendaSesion(cliente, token, tienda.catalogo, ofertasActivas, tienda.getIdioma());
         }
 
         return null;

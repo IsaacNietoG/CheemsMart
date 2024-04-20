@@ -8,7 +8,13 @@ import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoComponent;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 
-public class TiendaSesion implements Tienda {
+/**
+ *  La clase que representa TiendaSession del lado del Server.
+ *
+ *  Debido a que en el lado del server no es usada, nos interesa solamente que su construccion sea la adecuada, las implementaciones
+ *  de sus métodos no son relevantes en este lado, se dan en el lado del Cliente
+ *  */
+public class TiendaSesion implements Tienda{
     private final Cliente cliente;
     private String token;
     private InterfaceUsuario interfaceUsuario;
@@ -18,11 +24,12 @@ public class TiendaSesion implements Tienda {
     private LinkedList<CatalogoItem> ofertasActivas;
 
 
-    public TiendaSesion(Cliente user, String token, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas) {
+    public TiendaSesion(Cliente user, String token, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas, HashMap<String, String> idioma) {
         this.cliente = user;
         this.catalogo = catalogo;
         this.token = token;
         this.ofertasActivas = ofertasActivas;
+        this.idioma = idioma;
     }
 
     public void iniciar() {
