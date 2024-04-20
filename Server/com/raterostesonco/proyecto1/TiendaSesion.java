@@ -82,7 +82,7 @@ public class TiendaSesion implements Tienda {
                     try {
                         seleccion = Integer.parseInt(interfaceUsuario.pedirEntrada("valorProducto"));
 
-                        if (seleccion >= catalogoSize || seleccion < 0) {
+                        if (seleccion >= recurse.getSize() || seleccion < 0) {
                             throw new IllegalArgumentException();
                         }
                         recurse = recurse.getHijo(seleccion);

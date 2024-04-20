@@ -53,4 +53,9 @@ public interface CatalogoComponent extends Serializable {
      * Da el nombre del componente.
      */
     public String getNombre();
+
+    /**
+     *  Tamaño del arreglo, es decir, la cantidad de hijos
+     *  */
+    public int getSize();
 }

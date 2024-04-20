@@ -61,6 +61,11 @@ public abstract class CatalogoItem implements CatalogoComponent {
         return null;
     }
 
+    @Override
+    public int getSize() {
+        return 0;
+    }
+
     public abstract int getCodigoDeBarras();
 
     public abstract String getNombre();
