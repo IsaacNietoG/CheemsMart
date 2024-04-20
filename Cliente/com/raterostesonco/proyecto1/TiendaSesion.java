@@ -37,8 +37,8 @@ public class TiendaSesion implements Tienda {
         mostrarOpciones();
     }
 
-    private void setInterfaceUsuario() {
-        interfaceUsuario = new InterfaceUsuario(this, idioma);
+    public void setInterfaceUsuario() {
+        this.interfaceUsuario = new InterfaceUsuario(this, idioma);
         idioma = null;
 
     }
@@ -149,7 +149,7 @@ public class TiendaSesion implements Tienda {
 
     private void imprimirTicket() {
         StringBuilder sb = new StringBuilder();
-        sb.append(interfaceUsuario.getClave("cabezaTicket")).append(interfaceUsuario.getClave("pedido")).append(carrito.hashCode()).append('\n');
+        sb.append(interfaceUsuario.getClave("cabezaTicket")).append(interfaceUsuario.getClave("pedido")).append(cliente.getCarritoCompras().hashCode()).append('\n');
         sb.append(interfaceUsuario.getClave("hasComprado"));
 
         for(CatalogoItem s : cliente.getCarritoCompras()) {

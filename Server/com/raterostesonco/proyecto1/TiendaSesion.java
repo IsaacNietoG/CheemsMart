@@ -1,6 +1,7 @@
 package Server.com.raterostesonco.proyecto1;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import Server.com.raterostesonco.proyecto1.basedatos.*;
@@ -22,6 +23,7 @@ public class TiendaSesion implements Tienda{
     private ArrayList<CatalogoComponent> catalogoAuxiliar;
     private int catalogoSize;
     private LinkedList<CatalogoItem> ofertasActivas;
+    private HashMap<String, String> idioma;
 
 
     public TiendaSesion(Cliente user, String token, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas, HashMap<String, String> idioma) {

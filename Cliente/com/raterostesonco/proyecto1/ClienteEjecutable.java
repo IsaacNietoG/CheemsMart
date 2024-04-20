@@ -21,7 +21,6 @@ public class ClienteEjecutable {
         // se ve más trucutrú xd
         Thread.sleep(3000);
 
-
         mensajeador = new RemoteMessagePassing<>(new ServerSocket(8080).accept());
 
 
@@ -36,10 +35,7 @@ public class ClienteEjecutable {
     public static void login() {
         Optional<TiendaSesion> login = new Login(interfaceUsuario.pedirEntrada("Ingresa tu usuario: "), interfaceUsuario.pedirEntrada("Ingresa la contraseña: ")).loggear();
 
-        login.ifPresentOrElse(tiendaSesion -> {
-            tiendaSesion.setInterfaceUsuario(new InterfaceUsuario(tiendaSesion));
-            tiendaSesion.iniciar();
-        }, () -> {
+        login.ifPresentOrElse(TiendaSesion::iniciar, () -> {
             interfaceUsuario.imprimirMensaje("El usuario ingresado no es válido");
             login();
         });
