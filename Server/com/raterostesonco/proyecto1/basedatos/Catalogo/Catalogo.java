@@ -133,4 +133,9 @@ public class Catalogo implements CatalogoComponent {
     public String toString() {
         return "Categoria: " + getNombre();
     }
+
+    @Override
+    public int getSize() {
+        return hijos.size();
+    }
 }
