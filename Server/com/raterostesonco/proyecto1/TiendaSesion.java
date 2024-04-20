@@ -86,8 +86,8 @@ public class TiendaSesion implements Tienda {
                     } catch (IllegalArgumentException e) {
                         interfaceUsuario.imprimirMensaje("valorInvalido");
 
+                    }
                 }while(iterator.hasNext());
-
                 for(CatalogoItem item : ofertasActivas){
                     if(item.getNombre().equals(recurse.getNombre()))
                         recurse = item;
