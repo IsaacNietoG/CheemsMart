@@ -1,13 +1,10 @@
 package Cliente.com.raterostesonco.proyecto1;
 
-import Server.com.raterostesonco.proyecto1.communication.*;
-import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
-import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
-import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
+import Cliente.com.raterostesonco.proyecto1.communication.*;
+import Cliente.com.raterostesonco.proyecto1.modelo.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class TiendaSesion {
@@ -16,16 +13,14 @@ public class TiendaSesion {
     private String token;
     private InterfaceUsuario interfaceUsuario;
     private Catalogo catalogo;
-    private LinkedList<CatalogoItem> carrito;
-    private LinkedList<CatalogoItem> ofertasActivas;
+    private LinkedList<CatalogoItem> carrito, ofertasActivas;
 
 
-    public TiendaSesion(Cliente user, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas) {
+    public TiendaSesion(Cliente user, String token, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas) {
         this.cliente = user;
         this.catalogo = catalogo;
+        this.token = token;
         this.ofertasActivas = ofertasActivas;
-        this.carrito = new LinkedList<>();
-        this.interfaceUsuario = new InterfaceUsuario(this);
 
         // TODO token
     }
@@ -36,9 +31,13 @@ public class TiendaSesion {
         preguntarOpciones();
     }
 
+    private void setInterfaceUsuario(InterfaceUsuario interfaceUsuario) {
+        this.interfaceUsuario = interfaceUsuario;
+    }
+
     private void actualizarCatalogo() {
         @SuppressWarnings("unchecked")
-        ArrayList<CatalogoItem> catalogo = (ArrayList<CatalogoItem>) ClienteEjecutable.enviarPaquete(new PaqueteTienda(token, PaqueteTienda.TipoPaqueteTienda.SOLICITAR_CATALOGO, null)).getArgs()[0];
+        Catalogo catalogo = (Catalogo) ClienteEjecutable.enviarPaquete(new PaqueteTienda(token, PaqueteTienda.TipoPaqueteTienda.SOLICITAR_CATALOGO)).getArgs()[0];
 
         this.catalogo = catalogo;
     }
@@ -75,6 +74,7 @@ public class TiendaSesion {
                 try {
                     seleccion = Integer.parseInt(interfaceUsuario.pedirEntrada("Ingresa el valor del producto a comprar: ").trim());
 
+                    // TODO
                     if(seleccion >= catalogo.size() || seleccion < 0) {
                         throw new IllegalArgumentException();
                     }
@@ -93,12 +93,12 @@ public class TiendaSesion {
             // Cerrar sesión
             case 4 -> {
                 ClienteEjecutable.repetir = true;
-                ClienteEjecutable.enviarPaquete(new PaqueteCerrarSesion(user.getToken()));
+                ClienteEjecutable.enviarPaquete(new PaqueteCerrarSesion(token));
             }
             // Salir
             case 5 -> {
                 ClienteEjecutable.repetir = false;
-                ClienteEjecutable.enviarPaquete(new PaqueteCerrarSesion(user.getToken()));
+                ClienteEjecutable.enviarPaquete(new PaqueteCerrarSesion(token));
             }
         }
     }
@@ -106,14 +106,17 @@ public class TiendaSesion {
     private void imprimeCatalogo() {
         int n = 0;
         StringBuilder sb = new StringBuilder();
-        for(String item : catalogo) {
-            sb.append(n++).append(".- ").append(item).append('\n');
+        // TODO Hacer catalogo iterable o un metodo auxiliar para recorrer
+        for(CatalogoItem catalogoItem : catalogo.getIterador()) {
+            sb.append(n++).append(".- ").append(catalogoItem).append('\n');
         }
         interfaceUsuario.imprimirMensaje(sb.toString());
     }
 
     private void agregarCarrito(int item) {
-        PaqueteAbstractFactory paquete = ClienteEjecutable.enviarPaquete(new PaqueteAgregarCarrito(user.getToken(), carrito.get(item)));
+
+        // TODO
+        PaqueteAbstractFactory paquete = ClienteEjecutable.enviarPaquete(new PaqueteAgregarCarrito(token, carrito.get(item)));
 
         if(paquete.getArgs()[0].equals("SUCCESSFUL")) {
             carrito.add(carrito.get(item));
@@ -130,7 +133,7 @@ public class TiendaSesion {
             return;
         }
 
-        PaqueteAbstractFactory respuesta = ClienteEjecutable.enviarPaquete(new PaqueteTienda(user.getToken(), PaqueteTienda.TipoPaqueteTienda.COMPRA));
+        PaqueteAbstractFactory respuesta = ClienteEjecutable.enviarPaquete(new PaqueteTienda(token, PaqueteTienda.TipoPaqueteTienda.COMPRA));
 
         if(respuesta.getArgs()[0].equals("SUCCESSFUL")) {
             interfaceUsuario.imprimirMensaje("Tu compra ha sido realizada exitosamente!\n\n");

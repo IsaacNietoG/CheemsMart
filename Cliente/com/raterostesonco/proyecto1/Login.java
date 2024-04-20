@@ -15,7 +15,7 @@ public class Login {
         this.contrasenia = String.valueOf(contrasenia.hashCode());
     }
 
-    public Optional<String> loggear() {
-        return Optional.ofNullable((String) ClienteEjecutable.enviarPaquete(new PaqueteInicioSesion(usuario, contrasenia)).getArgs()[0]);
+    public Optional<TiendaSesion> loggear() {
+        return Optional.ofNullable((TiendaSesion) ClienteEjecutable.enviarPaquete(new PaqueteInicioSesion(usuario, contrasenia)).getArgs()[0]);
     }
 }

@@ -1,6 +1,8 @@
-package Server.com.raterostesonco.proyecto1.basedatos;
+package Cliente.com.raterostesonco.proyecto1.modelo;
 
+import Server.com.raterostesonco.proyecto1.basedatos.ArbolAVL;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.Catalogo;
+import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
 
 import java.io.*;
 
@@ -16,7 +18,7 @@ import java.io.*;
 
 public class BaseDeDatos {
 
-    private static ArbolAVL<Cliente> arbol;
+    private static ArbolAVL<Server.com.raterostesonco.proyecto1.basedatos.Cliente> arbol;
     private static Catalogo catalogo;
 
     /**
@@ -33,7 +35,7 @@ public class BaseDeDatos {
             FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file);
 
-            arbol = (ArbolAVL<Cliente>) in.readObject();
+            arbol = (ArbolAVL<Server.com.raterostesonco.proyecto1.basedatos.Cliente>) in.readObject();
 
             in.close();
             file.close();
@@ -80,9 +82,8 @@ public class BaseDeDatos {
             FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file);
 
-            @SuppressWarnings("unchecked") Catalogo catalogoA = (Catalogo) in.readObject();
-
-            catalogo = catalogoA;
+            @SuppressWarnings("unchecked")
+                    catalogo = (Catalogo) in.readObject();
 
             in.close();
             file.close();
@@ -94,11 +95,11 @@ public class BaseDeDatos {
     }
 
     /**
-     * Busca un cliente según su username
+     *  Busca un cliente según su username
      *
      * @return el objeto Cliente deseado.
      */
-    public static Cliente getCliente(String idString) {
+    public static Server.com.raterostesonco.proyecto1.basedatos.Cliente getCliente(String idString) {
         return arbol.busca(Cliente.darReferencia(idString)).get();
     }
 

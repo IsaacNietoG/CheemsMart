@@ -34,9 +34,9 @@ public class ClienteEjecutable {
     }
 
     public static void login() {
-        Optional<String> login = new Login(interfaceUsuario.pedirEntrada("Ingresa tu usuario: "), interfaceUsuario.pedirEntrada("Ingresa la contraseña: ")).loggear();
+        Optional<TiendaSesion> login = new Login(interfaceUsuario.pedirEntrada("Ingresa tu usuario: "), interfaceUsuario.pedirEntrada("Ingresa la contraseña: ")).loggear();
 
-        login.ifPresentOrElse((user -> new TiendaSesion(new User(user)).iniciar()), () -> {
+        login.ifPresentOrElse((TiendaSesion::iniciar), () -> {
             interfaceUsuario.imprimirMensaje("El usuario ingresado no es válido");
             login();
         });
