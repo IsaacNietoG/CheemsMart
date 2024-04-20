@@ -57,7 +57,7 @@ public class Server {
                 Socket s = server.accept();
                 RemoteMessagePassing<PaqueteAbstractFactory> rmp = new RemoteMessagePassing<>(s);
                 PaqueteAbstractFactory paquete = rmp.receive();
-                System.out.println("Paquete recibido, " + paquete.getClass().getName());
+                System.out.println("Paquete recibido, " + paquete.getClass().getSimpleName());
 
                 if (paquete instanceof PaqueteInicioSesion paqueteA) {
                     rmp.send(iniciarSesion((String) paqueteA.getArgs()[0], (String) paqueteA.getArgs()[1]));
@@ -87,7 +87,7 @@ public class Server {
 
     private static TiendaServer getTienda(Cliente cliente) {
         for (TiendaServer tiendaServer : listaTiendas) {
-            if (tiendaServer.pais.equals(cliente.getCountry())) {
+            if (tiendaServer.getPais().equals(cliente.getCountry())) {
                 return tiendaServer;
             }
         }

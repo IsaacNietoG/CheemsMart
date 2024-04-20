@@ -82,11 +82,11 @@ public class Catalogo implements CatalogoComponent {
      */
     @Override
     public CatalogoComponent getHijo(int indice) {
-        if (indice < 0)
+        if (indice < 0 || hijos.isEmpty())
             return null;
 
         if (indice >= hijos.size())
-            while (indice > hijos.size())
+            while (indice >= hijos.size())
                 indice -= hijos.size();
 
         return hijos.get(indice);

@@ -29,10 +29,17 @@ public class ClienteEjecutable {
     }
 
     public static void login() {
-        Optional<TiendaSesion> login = new Login(interfaceUsuario.pedirEntrada("Ingresa tu usuario: "), interfaceUsuario.pedirEntrada("Ingresa la contraseña: ")).loggear();
+        Optional<PaqueteRespuesta> login = new Login(interfaceUsuario.pedirEntrada("Ingresa tu usuario: ").trim(), interfaceUsuario.pedirEntrada("Ingresa la contraseña: ").trim()).loggear();
 
-        login.ifPresentOrElse(TiendaSesion::iniciar, () -> {
-            interfaceUsuario.imprimirMensaje("El usuario ingresado no es válido\n\n");
+        login.ifPresentOrElse(paqueteRespuesta -> {
+            if(paqueteRespuesta.getArgs()[0] != null) {
+                ((TiendaSesion)paqueteRespuesta.getArgs()[0]).iniciar();
+            } else {
+                interfaceUsuario.imprimirMensaje("Credenciales ingresadas inválidas\n\n");
+                login();
+            }
+        }, () -> {
+            interfaceUsuario.imprimirMensaje("Credenciales ingresadas inválidas\n\n");
             login();
         });
     }

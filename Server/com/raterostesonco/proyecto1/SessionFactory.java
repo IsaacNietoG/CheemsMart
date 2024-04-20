@@ -20,26 +20,26 @@ public class SessionFactory {
 
         Cliente cliente = BaseDeDatos.getCliente(user);
 
-        if (cliente != null && contrasenia.hashCode() == Integer.parseInt(cliente.getPassword())) {
+        if (cliente != null && contrasenia.equals(cliente.getPassword())) {
             String token = generarToken();
             Server.getSesionesActivas().put(token, cliente);
 
             TiendaServer tienda = null;
             for(TiendaServer t : tiendas){
-                if(t.pais == cliente.getCountry()){
+                if(t.getPais() == cliente.getCountry()){
                     tienda = t;
                 }
             }
             LinkedList<CatalogoItem> ofertasActivas = (LinkedList<CatalogoItem>)tienda.darGeneradorOfertas().darOfertas(cliente);
 
-            return new TiendaSesion(cliente, token, tienda.catalogo, ofertasActivas, tienda.getIdioma());
+            return new TiendaSesion(cliente, token, tienda.getCatalogo(), ofertasActivas, tienda.getIdioma());
         }
 
         return null;
     }
 
     private String generarToken() {
-        return UUID.fromString(String.valueOf(System.nanoTime() + new Random().nextLong())).toString();
+        return UUID.randomUUID().toString();
     }
 
 

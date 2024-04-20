@@ -26,12 +26,13 @@ import java.util.Iterator;
  */
 public class TiendaServer implements Tienda {
 
-    GeneradorOfertas generadorOfertas;
-    Catalogo catalogo;
-    public Pais pais;
-    HashMap<String, String> idioma;
+    private GeneradorOfertas generadorOfertas;
+    private final Catalogo catalogo;
+    private final Pais pais;
+    private HashMap<String, String> idioma;
 
     public TiendaServer(Pais pais, Catalogo catalogo) {
+        this.pais = pais;
         switch (pais) {
             case MEXICO:
                 generadorOfertas = GeneradorOfertasMX.getInstance(catalogo);
@@ -47,6 +48,14 @@ public class TiendaServer implements Tienda {
                 break;
         }
         this.catalogo = catalogo;
+    }
+
+    public Catalogo getCatalogo() {
+        return catalogo;
+    }
+
+    public Pais getPais() {
+        return pais;
     }
 
     @Override

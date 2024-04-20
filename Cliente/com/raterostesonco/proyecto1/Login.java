@@ -1,7 +1,9 @@
 package Cliente.com.raterostesonco.proyecto1;
 
+import Server.com.raterostesonco.proyecto1.TiendaServer;
 import Server.com.raterostesonco.proyecto1.TiendaSesion;
 import Server.com.raterostesonco.proyecto1.communication.PaqueteInicioSesion;
+import Server.com.raterostesonco.proyecto1.communication.PaqueteRespuesta;
 
 import java.util.Optional;
 
@@ -16,7 +18,9 @@ public class Login {
         this.contrasenia = String.valueOf(contrasenia.hashCode());
     }
 
-    public Optional<TiendaSesion> loggear() {
-        return Optional.ofNullable((TiendaSesion) ClienteEjecutable.enviarPaquete(new PaqueteInicioSesion(usuario, contrasenia)).getArgs()[0]);
+    public Optional<PaqueteRespuesta> loggear() {
+        PaqueteRespuesta tiendaSesion = (PaqueteRespuesta) ClienteEjecutable.enviarPaquete(new PaqueteInicioSesion(usuario, contrasenia));
+
+        return Optional.ofNullable(tiendaSesion);
     }
 }

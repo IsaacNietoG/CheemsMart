@@ -1,9 +1,6 @@
 package Server.com.raterostesonco.proyecto1.communication;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.Socket;
 
 /*
@@ -64,6 +61,8 @@ public class RemoteMessagePassing<T extends Serializable> {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
 
+        } catch (EOFException e) {
+            value = null;
         } catch (IOException e) {
             e.printStackTrace();
         }
