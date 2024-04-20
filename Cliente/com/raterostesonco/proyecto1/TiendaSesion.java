@@ -6,17 +6,20 @@ import Cliente.com.raterostesonco.proyecto1.modelo.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class TiendaSesion {
+public class TiendaSesion implements Tienda {
 
     private final Cliente cliente;
     private String token;
     private InterfaceUsuario interfaceUsuario;
     private Catalogo catalogo;
-    private LinkedList<CatalogoItem> carrito, ofertasActivas;
+    private ArrayList<CatalogoComponent> catalogoAuxiliar;
+    private int catalogoSize;
     private HashMap<String, String> idioma;
+    private LinkedList<CatalogoItem> ofertasActivas;
 
 
     public TiendaSesion(Cliente user, String token, Catalogo catalogo, LinkedList<CatalogoItem> ofertasActivas, HashMap<String, String> idioma) {
@@ -31,61 +34,54 @@ public class TiendaSesion {
         setInterfaceUsuario();
         interfaceUsuario.imprimirMensaje(String.format(interfaceUsuario.getClave("bienvenida"), cliente.getName()));
 
-        preguntarOpciones();
+        mostrarOpciones();
     }
 
     private void setInterfaceUsuario() {
         interfaceUsuario = new InterfaceUsuario(this, idioma);
         idioma = null;
+
     }
 
-    private void actualizarCatalogo() {
-        @SuppressWarnings("unchecked")
-        Catalogo catalogo = (Catalogo) ClienteEjecutable.enviarPaquete(new PaqueteTienda(token, PaqueteTienda.TipoPaqueteTienda.SOLICITAR_CATALOGO)).getArgs()[0];
-
-        this.catalogo = catalogo;
-    }
-
-    private void preguntarOpciones() {
+    public void mostrarOpciones() {
 
         int opcion;
         try {
             opcion = Integer.parseInt(interfaceUsuario.pedirEntrada("menuOpciones"));
         } catch (NumberFormatException numberFormatException) {
             interfaceUsuario.imprimirMensaje("opcionValida");
-            preguntarOpciones();
+            mostrarOpciones();
             return;
         }
 
         switch (opcion) {
             // Imprimir catalogo
             case 1 -> {
-                imprimeCatalogo();
-                preguntarOpciones();
+                mostrarCatalogo();
+                mostrarOpciones();
             }
             // Agregar al carrito
             case 2 -> {
-                imprimeCatalogo();
+                mostrarCatalogo();
 
                 int seleccion;
                 try {
                     seleccion = Integer.parseInt(interfaceUsuario.pedirEntrada("valorProducto"));
 
-                    // TODO
-                    if(seleccion >= catalogo.size() || seleccion < 0) {
+                    if(seleccion >= catalogoSize || seleccion < 0) {
                         throw new IllegalArgumentException();
                     }
-                    agregarCarrito(seleccion);
+                    agregarCarrito(cliente, (CatalogoItem) catalogoAuxiliar.get(seleccion));
                 } catch (IllegalArgumentException e) {
                     interfaceUsuario.imprimirMensaje("valorInvalido");
                 }
 
-                preguntarOpciones();
+                mostrarOpciones();
             }
             // Terminar compra
             case 3 -> {
-                comprarCarrito();
-                preguntarOpciones();
+                hacerCompra(cliente, interfaceUsuario.pedirEntrada("Por seguridad, ingresa tu cuenta bancaria para continuar: "));
+                mostrarOpciones();
             }
             // Cerrar sesión
             case 4 -> {
@@ -100,42 +96,54 @@ public class TiendaSesion {
         }
     }
 
-    private void imprimeCatalogo(CatalogoComponent catalogo) {
+    @Override
+    public void mostrarCatalogo() {
+        catalogoSize = 0;
+        mostrarCatalogo(catalogo, new StringBuilder());
+
+        catalogoAuxiliar = new ArrayList<>();
+    }
+
+    private void mostrarCatalogo(CatalogoComponent catalogo, StringBuilder sb) {
         Iterator<CatalogoComponent> iterador = catalogo.getIterador();
-        System.out.println(catalogo);
+
+        sb.append(catalogoSize++).append(".- ").append(catalogo);
+        catalogoAuxiliar.add(catalogo);
         while(iterador.hasNext()){
-            imprimeCatalogo(iterador.next());
+            mostrarCatalogo(iterador.next(), sb);
         }
     }
 
-    private void agregarCarrito(int item) {
-
-        // TODO
-        PaqueteAbstractFactory paquete = ClienteEjecutable.enviarPaquete(new PaqueteAgregarCarrito(token, carrito.get(item)));
+    @Override
+    public void agregarCarrito(Cliente cliente, CatalogoItem item) {
+        PaqueteAbstractFactory paquete = ClienteEjecutable.enviarPaquete(new PaqueteAgregarCarrito(token, item));
 
         if(paquete.getArgs()[0].equals("SUCCESSFUL")) {
-            carrito.add(carrito.get(item));
+            cliente.getCarritoCompras().agregar(item);
             interfaceUsuario.imprimirMensaje("itemCorrecto");
         } else {
             interfaceUsuario.imprimirMensaje("errorItem");
         }
     }
 
-    private void comprarCarrito() {
-
-        if(carrito.isEmpty()) {
+    @Override
+    public boolean hacerCompra(Cliente cliente, String cuenta) {
+        if(cliente.getCarritoCompras().esVacio()) {
             interfaceUsuario.imprimirMensaje("carritoVacio");
-            return;
+            return false;
         }
 
-        PaqueteAbstractFactory respuesta = ClienteEjecutable.enviarPaquete(new PaqueteTienda(token, PaqueteTienda.TipoPaqueteTienda.COMPRA));
+        PaqueteAbstractFactory respuesta = ClienteEjecutable.enviarPaquete(new PaqueteTienda(token, PaqueteTienda.TipoPaqueteTienda.COMPRA, cuenta));
 
         if(respuesta.getArgs()[0].equals("SUCCESSFUL")) {
             interfaceUsuario.imprimirMensaje("compraExitosa");
             imprimirTicket();
-            carrito.clear();
+            cliente.getCarritoCompras().vaciar();
+            return true;
         } else {
             interfaceUsuario.imprimirMensaje("errorItem");
+
+            return false;
         }
     }
 
@@ -144,7 +152,7 @@ public class TiendaSesion {
         sb.append(interfaceUsuario.getClave("cabezaTicket")).append(interfaceUsuario.getClave("pedido")).append(carrito.hashCode()).append('\n');
         sb.append(interfaceUsuario.getClave("hasComprado"));
 
-        for(CatalogoItem s : carrito) {
+        for(CatalogoItem s : cliente.getCarritoCompras()) {
             sb.append('\t').append(s).append('\n');
         }
 

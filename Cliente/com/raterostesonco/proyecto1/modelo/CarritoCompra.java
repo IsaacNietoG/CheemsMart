@@ -1,7 +1,5 @@
 package Cliente.com.raterostesonco.proyecto1.modelo;
 
-import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -28,6 +26,14 @@ public class CarritoCompra implements Iterable<CatalogoItem> {
 
     public void vaciar() {
         lista.clear();
+    }
+
+    public boolean esVacio() {
+        return lista.isEmpty();
+    }
+
+    public CatalogoItem get(int i) {
+        return lista.get(i);
     }
 
     @Override

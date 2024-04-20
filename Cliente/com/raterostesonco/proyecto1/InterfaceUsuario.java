@@ -1,13 +1,9 @@
 package Cliente.com.raterostesonco.proyecto1;
 
-import java.util.HashMap;
+import java.io.Serializable;
 import java.util.Scanner;
 
-/**
- *  La clase que modela la vista del usuario. Tiene los metodos necesarios para enviar mensajes
- *  y recibir respuestas, asi mimo, es la que implementa el lenguaje mediante su diccionario integrado.
- *  */
-public class InterfaceUsuario {
+public class InterfaceUsuario implements Serializable {
     private static final Scanner scanner = new Scanner(System.in);
     private final String prefix;
     private HashMap<String, String> diccionario;

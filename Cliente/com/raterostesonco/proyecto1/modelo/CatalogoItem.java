@@ -24,7 +24,6 @@ public abstract class CatalogoItem implements CatalogoComponent {
     @Override
     public void aniadir(CatalogoComponent item) {
         ArrayList<CatalogoComponent> list = new ArrayList<>();
-        list.add("");
         list.add(this);
         list.add(item);
         this.departamento.remover(this);
