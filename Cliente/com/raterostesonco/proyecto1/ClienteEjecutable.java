@@ -18,9 +18,6 @@ public class ClienteEjecutable {
     public static void main(String[] args) throws InterruptedException, IOException {
         interfaceUsuario.imprimirMensaje("Inicializando cliente, por favor espere...");
 
-        // se ve más trucutrú xd
-        Thread.sleep(3000);
-
         mensajeador = new RemoteMessagePassing<>(new ServerSocket(8080).accept());
 
 

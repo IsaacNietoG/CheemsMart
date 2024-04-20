@@ -83,7 +83,9 @@ public class BaseDeDatos {
             ObjectInputStream in = new ObjectInputStream(file);
 
             @SuppressWarnings("unchecked")
-                    catalogo = (Catalogo) in.readObject();
+                    Catalogo catalogoA = (Catalogo) in.readObject();
+
+            catalogo = catalogoA;
 
             in.close();
             file.close();
