@@ -19,7 +19,7 @@ public class EspanolMX {
                         3.- Comprar carrito
                         4.- Cerrar sesión
                         5.- Salir
-                    """).trim();
+                    """);
         diccionario.put("opcionValida", "Digita una opción válida");
         diccionario.put("valorProducto", "Ingresa el valor del producto a comprar: ");
         diccionario.put("valorInvalido", "Introduce un valor válido");

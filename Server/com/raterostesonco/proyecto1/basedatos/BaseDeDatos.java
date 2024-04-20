@@ -37,9 +37,7 @@ public class BaseDeDatos {
 
             in.close();
             file.close();
-        } catch (IOException e) {
-            System.out.println("IOException al cargar la base de datos");
-        } catch (ClassCastException | ClassNotFoundException e) {
+        } catch (IOException | ClassCastException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

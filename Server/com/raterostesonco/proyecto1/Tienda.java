@@ -3,6 +3,8 @@ package Server.com.raterostesonco.proyecto1;
 import Server.com.raterostesonco.proyecto1.basedatos.Catalogo.CatalogoItem;
 import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
 
+import java.io.Serializable;
+
 /**
  * La interface que da los metodos necesarios para una Tienda
  * <p>
@@ -10,7 +12,7 @@ import Server.com.raterostesonco.proyecto1.basedatos.Cliente;
  * el objeto {@link Cliente.com.raterostesonco.proyecto1.TiendaSesion} y los objetos hijos de
  * {@link TiendaAbstracta}
  */
-public interface Tienda {
+public interface Tienda extends Serializable {
     public void mostrarOpciones();
 
     public void mostrarCatalogo();

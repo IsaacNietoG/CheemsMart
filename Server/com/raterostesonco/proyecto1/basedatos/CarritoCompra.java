@@ -30,6 +30,10 @@ public class CarritoCompra implements Iterable<CatalogoItem> {
         lista.clear();
     }
 
+    public boolean esVacio() {
+        return lista.isEmpty();
+    }
+
     @Override
     public Iterator<CatalogoItem> iterator() {
         return lista.iterator();

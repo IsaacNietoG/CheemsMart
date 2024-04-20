@@ -1,10 +1,10 @@
 package Cliente.com.raterostesonco.proyecto1;
 
-import Cliente.com.raterostesonco.proyecto1.communication.PaqueteAbstractFactory;
-import Cliente.com.raterostesonco.proyecto1.communication.RemoteMessagePassing;
+import Server.com.raterostesonco.proyecto1.TiendaSesion;
+import Server.com.raterostesonco.proyecto1.communication.*;
 
 import java.io.IOException;
-import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Optional;
 
 /**
@@ -15,11 +15,10 @@ public class ClienteEjecutable {
     private static final InterfaceUsuario interfaceUsuario = new InterfaceUsuario(new ClienteEjecutable());
     public static boolean repetir = true;
 
-    public static void main(String[] args) throws InterruptedException, IOException {
-        interfaceUsuario.imprimirMensaje("Inicializando cliente, por favor espere...");
+    public static void main(String[] args) throws IOException {
+        interfaceUsuario.imprimirMensaje("Inicializando cliente, por favor espere...\n");
 
-        mensajeador = new RemoteMessagePassing<>(new ServerSocket(8080).accept());
-
+        mensajeador = new RemoteMessagePassing<>(new Socket("localhost", 8080));
 
         while (repetir) {
             repetir = false;
@@ -30,10 +29,17 @@ public class ClienteEjecutable {
     }
 
     public static void login() {
-        Optional<TiendaSesion> login = new Login(interfaceUsuario.pedirEntrada("Ingresa tu usuario: "), interfaceUsuario.pedirEntrada("Ingresa la contraseña: ")).loggear();
+        Optional<PaqueteRespuesta> login = new Login(interfaceUsuario.pedirEntrada("Ingresa tu usuario: ").trim(), interfaceUsuario.pedirEntrada("Ingresa la contraseña: ").trim()).loggear();
 
-        login.ifPresentOrElse(TiendaSesion::iniciar, () -> {
-            interfaceUsuario.imprimirMensaje("El usuario ingresado no es válido");
+        login.ifPresentOrElse(paqueteRespuesta -> {
+            if(paqueteRespuesta.getArgs()[0] != null) {
+                ((TiendaSesion)paqueteRespuesta.getArgs()[0]).iniciar();
+            } else {
+                interfaceUsuario.imprimirMensaje("Credenciales ingresadas inválidas\n\n");
+                login();
+            }
+        }, () -> {
+            interfaceUsuario.imprimirMensaje("Credenciales ingresadas inválidas\n\n");
             login();
         });
     }
