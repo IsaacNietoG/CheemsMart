@@ -1,4 +1,4 @@
-package Cliente.com.raterostesonco.proyecto1;
+package Server.com.raterostesonco.proyecto1;
 
 import java.io.Serializable;
 import java.util.Scanner;

@@ -6,8 +6,8 @@ public class PaqueteTienda extends PaqueteAbstractFactory {
         SOLICITAR_CATALOGO, COMPRA
     }
 
-    public PaqueteTienda(String token, TipoPaqueteTienda tipo) {
-        super(token, tipo.name(), null);
+    public PaqueteTienda(String token, TipoPaqueteTienda tipo, String cuenta) {
+        super(token, tipo.name(), new Object[]{ cuenta });
     }
 
 }

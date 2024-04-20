@@ -1,8 +1,10 @@
 package Cliente.com.raterostesonco.proyecto1.communication;
 
+import Cliente.com.raterostesonco.proyecto1.modelo.CatalogoItem;
+
 public class PaqueteAgregarCarrito extends PaqueteAbstractFactory {
 
-    public PaqueteAgregarCarrito(String token, String codigo) {
-        super(token, "AGREGAR", new String[]{ codigo });
+    public PaqueteAgregarCarrito(String token, CatalogoItem catalogoItem) {
+        super(token, "AGREGAR", new Object[]{ catalogoItem });
     }
 }
