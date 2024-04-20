@@ -20,7 +20,7 @@ public class EspanolEspania {
                         4.- Cerrar sesión
                         5.- Salir
                     """);
-        diccionario.put("oferta" ,"Hay precios acojonantes para ti en estos productos chaval: ");
+        diccionario.put("ofertas" ,"Hay precios acojonantes para ti en estos productos chaval: ");
         diccionario.put("opcionValida", "Esa opción no es válida tío");
         diccionario.put("valorProducto", "Chaval, ingresa el valor del producto a comprar: ");
         diccionario.put("valorInvalido", "Ese valor no es válido tío");
@@ -32,6 +32,7 @@ public class EspanolEspania {
         diccionario.put("pedido", "No. Pedido: ");
         diccionario.put("hasComprado", "Has comprado:\n");
         diccionario.put("estimadaEntrega", "Fecha estimada de entrega: ");
+        diccionario.put("seguridad", "Joder, necesitamos tu cuenta bancaria para continuar: ");
 
         return diccionario;
     }

@@ -20,7 +20,7 @@ public class EnglishUSA {
                         4.- Logout
                         5.- Exit
                     """);
-        diccionario.put("oferta" ,"You have special discounts only for today in this products: ");
+        diccionario.put("ofertas" ,"You have special discounts only for today in this products: ");
         diccionario.put("opcionValida", "Choose a valid option");
         diccionario.put("valorProducto", "Enter the ID value of the chosen product: ");
         diccionario.put("valorInvalido", "Enter a correct value");
@@ -32,6 +32,7 @@ public class EnglishUSA {
         diccionario.put("pedido", "Order Number: ");
         diccionario.put("hasComprado", "You have bought: :\n");
         diccionario.put("estimadaEntrega", "Estimated shipping date: ");
+        diccionario.put("seguridad", "For security reason, enter your bank account number: ");
 
         return diccionario;
     }
