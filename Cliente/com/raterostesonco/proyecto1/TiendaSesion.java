@@ -5,6 +5,7 @@ import Cliente.com.raterostesonco.proyecto1.modelo.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class TiendaSesion {
@@ -103,14 +104,12 @@ public class TiendaSesion {
         }
     }
 
-    private void imprimeCatalogo() {
-        int n = 0;
-        StringBuilder sb = new StringBuilder();
-        // TODO Hacer catalogo iterable o un metodo auxiliar para recorrer
-        for(CatalogoItem catalogoItem : catalogo.getIterador()) {
-            sb.append(n++).append(".- ").append(catalogoItem).append('\n');
+    private void imprimeCatalogo(CatalogoComponent catalogo) {
+        Iterator<CatalogoComponent> iterador = catalogo.getIterador();
+        System.out.println(catalogo);
+        while(iterador.hasNext()){
+            imprimeCatalogo(iterador.next());
         }
-        interfaceUsuario.imprimirMensaje(sb.toString());
     }
 
     private void agregarCarrito(int item) {
